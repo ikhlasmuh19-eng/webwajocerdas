@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="id"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Konsol Admin | SIP-ATS Kabupaten Wajo</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{civic:{950:'#07101f',900:'#0c1a30',850:'#112240',700:'#23416b',600:'#1d4ed8',100:'#e7eef8'},ochre:{700:'#8c4302',500:'#d97706',400:'#f59e0b',100:'#fef3c7',50:'#fffbeb'}},fontFamily:{sans:['"Plus Jakarta Sans"','sans-serif']}}}}</script>
+<script src="assets/config.js"></script>
+<style>body{background:#f8fafc;color:#0c1a30}.material-symbols-outlined{font-size:20px}input,select,textarea{outline:none}input:focus,select:focus,textarea:focus{border-color:#1d4ed8;box-shadow:0 0 0 2px #1d4ed822}</style>
+</head>
+<body class="font-sans antialiased">
+
+<!-- LOGIN -->
+<div id="loginScreen" class="min-h-screen flex items-center justify-center bg-civic-950 px-4">
+ <div class="w-full max-w-sm bg-white rounded-lg p-8 shadow-xl">
+  <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded bg-civic-600 text-white flex items-center justify-center font-extrabold">W</div>
+   <div><div class="text-sm font-extrabold">SIP-ATS WAJO</div><div class="text-[11px] text-slate-500">Konsol Admin &amp; Verifikasi</div></div></div>
+  <h1 class="text-lg font-bold mb-1">Masuk</h1>
+  <p class="text-xs text-slate-500 mb-5">Khusus petugas Dinas Pendidikan &amp; Kebudayaan dan UPTD Korwil Kecamatan.</p>
+  <label class="text-xs font-semibold block mb-1" for="lUser">Username</label>
+  <input id="lUser" class="w-full border border-slate-300 rounded px-3 py-2.5 text-sm mb-3" autocomplete="username">
+  <label class="text-xs font-semibold block mb-1" for="lPass">Kata Sandi</label>
+  <input id="lPass" type="password" class="w-full border border-slate-300 rounded px-3 py-2.5 text-sm mb-3" autocomplete="current-password">
+  <div id="loginErr" class="hidden text-xs text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2 mb-3"></div>
+  <button id="btnLogin" class="w-full bg-civic-600 hover:bg-blue-800 text-white font-semibold text-sm py-2.5 rounded disabled:opacity-50">Masuk Konsol</button>
+  <p class="text-[11px] text-slate-400 mt-4">Akun pertama: username <b>admin</b> dengan kata sandi = nilai <span class="font-mono">ADMIN_KEY</span> di Script Properties.</p>
+ </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden min-h-screen lg:flex">
+ <div id="scrim" class="hidden fixed inset-0 bg-black/50 z-30 lg:hidden"></div>
+ <aside id="sidebar" class="fixed lg:static z-40 inset-y-0 left-0 w-64 -translate-x-full lg:translate-x-0 transition-transform bg-civic-950 text-white flex flex-col justify-between shrink-0">
+  <div>
+   <div class="p-5 border-b border-civic-850 flex items-center gap-3"><div class="w-9 h-9 rounded bg-civic-600 flex items-center justify-center font-extrabold text-sm">W</div>
+    <div><div class="text-sm font-extrabold">SIP-ATS WAJO</div><div class="text-[10px] text-slate-400 tracking-wide">PUSAT KOMANDO &amp; VERIFIKASI</div></div></div>
+   <nav id="nav" class="p-3 space-y-1"></nav>
+  </div>
+  <div class="p-4 border-t border-civic-850">
+   <div class="text-xs font-semibold" id="uName"></div><div class="text-[11px] text-slate-400 mb-2" id="uRole"></div>
+   <button id="btnLogout" class="w-full text-xs font-semibold border border-civic-700 rounded py-2 hover:bg-civic-850">Keluar</button>
+  </div>
+ </aside>
+ <div class="flex-1 min-w-0">
+  <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex items-center justify-between gap-3 sticky top-0 z-20">
+   <div class="flex items-center gap-3"><button id="btnMenu" class="lg:hidden p-1"><span class="material-symbols-outlined">menu</span></button>
+    <h1 class="text-base sm:text-lg font-bold" id="viewTitle"></h1></div>
+   <div class="flex items-center gap-2"><span id="syncBadge" class="text-[11px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-1 rounded hidden sm:inline">Terhubung ke Google Sheet</span>
+    <a href="index.html" target="_blank" class="text-xs font-semibold border border-slate-200 rounded px-3 py-1.5 hover:bg-slate-50">Lihat Situs</a></div>
+  </header>
+  <main id="main" class="p-4 sm:p-6"></main>
+ </div>
+</div>
+
+<div id="modal" class="hidden fixed inset-0 z-50 bg-civic-950/60 backdrop-blur-sm flex items-start sm:items-center justify-center p-4 overflow-y-auto">
+ <div class="bg-white rounded-lg w-full max-w-2xl my-auto shadow-2xl">
+  <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100"><h3 id="mTitle" class="font-bold text-sm"></h3><button onclick="closeModal()" class="text-slate-400 hover:text-slate-700"><span class="material-symbols-outlined">close</span></button></div>
+  <div id="mBody" class="px-6 py-5 max-h-[70vh] overflow-y-auto"></div>
+  <div id="mFoot" class="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-2"></div>
+ </div>
+</div>
+<div id="toast" class="fixed bottom-4 right-4 z-[60] space-y-2"></div>
+
+<script>
+'use strict';
+const KEC=['Tempe','Pitumpanua','Belawa','Maniangpajo','Pammana','Sabbangparu','Tanasitolo','Majauleng','Takkalalla','Sajoanging','Penrang','Bola','Keera','Gilireng'];
+const STAT_LAP={PENDING:['Pending Survei','bg-amber-50 text-amber-700'],DITUGASKAN_UPTD:['Ditugaskan UPTD','bg-blue-50 text-blue-700'],VERIFIKASI_VALID:['Verifikasi Valid','bg-emerald-50 text-emerald-700'],REJECTED:['Ditolak','bg-red-50 text-red-700']};
+const STAT_INT=['Verifikasi Valid','Binaan UPTD','Diusulkan Beasiswa','Kembali Bersekolah (Formal)','Kembali Bersekolah (Paket A)','Kembali Bersekolah (Paket B)','Kembali Bersekolah (Paket C)'];
+const NAV=[
+ {id:'ringkasan',label:'Ringkasan Dasbor',icon:'grid_view',roles:['superadmin','verifikator','editor']},
+ {id:'verifikasi',label:'Verifikasi Lapangan',icon:'fact_check',roles:['superadmin','verifikator']},
+ {id:'master',label:'Master Data ATS',icon:'database',roles:['superadmin','verifikator']},
+ {id:'program',label:'Program Intervensi & Beasiswa',icon:'volunteer_activism',roles:['superadmin','editor']},
+ {id:'laporan',label:'Laporan & Statistik',icon:'bar_chart',roles:['superadmin','verifikator']},
+ {id:'beranda',label:'Kelola Beranda',icon:'web',roles:['superadmin','editor']},
+ {id:'pengguna',label:'Pengguna Petugas',icon:'group',roles:['superadmin']},
+ {id:'sistem',label:'Sistem & Log Audit',icon:'settings_ethernet',roles:['superadmin']}
+];
+const CMS=[
+ {t:'Pengumuman (pita di atas semua halaman publik)',f:[['banner_aktif','Tampilkan pengumuman','toggle',''],['banner_teks','Teks pengumuman','text','']]},
+ {t:'Hero Beranda',f:[
+  ['hero_eyebrow_1','Label kecil 1','text','AGENDA DAERAH'],['hero_eyebrow_2','Label kecil 2','text','WAJIB BELAJAR 13 TAHUN KABUPATEN WAJO'],
+  ['hero_title','Judul utama','area','Gerakan Bersama Menuntaskan Anak Tidak Sekolah di Bumi Lamaddukelleng.'],
+  ['hero_quote','Kutipan','area','"Setiap anak di Kabupaten Wajo memiliki hak konstitusional untuk bersekolah secara merdeka, tuntas, dan bermartabat tanpa terhalang kemiskinan maupun geografis."'],
+  ['hero_desc','Deskripsi','area','Pemerintah Kabupaten Wajo melalui Dinas Pendidikan dan Kebudayaan menyinergikan seluruh Satgas Kecamatan, UPTD Sekolah, serta Pemerintah Desa untuk mendeteksi, mendampingi, dan mengembalikan anak usia 7–18 tahun ke bangku sekolah formal maupun pendidikan kesetaraan PKBM.'],
+  ['hero_photo_url','URL foto hero (https://…)','url',''],['hero_photo_caption','Keterangan foto','text','Ruang kelas UPTD SD Negeri di Wajo menerima kembali murid binaan afirmasi SIP-ATS.'],
+  ['fokus_text','Teks "Fokus Penanganan Terpadu"','area','Intervensi terbagi atas: (1) Penyaluran beasiswa perlengkapan, (2) Advokasi orang tua & komite, (3) Pendaftaran Paket A/B/C gratis di Sanggar Kegiatan Belajar (SKB).']]},
+ {t:'Indikator Utama (KPI)',note:'Mode "otomatis" menghitung dari Master Data. Mode "manual" memakai angka di bawah.',f:[
+  ['kpi_mode','Mode angka KPI','select:otomatis|manual','otomatis'],['kpi_total','Total ATS terdata (manual)','text','1.428'],['kpi_kembali','Anak kembali bersekolah (manual)','text','482'],
+  ['kpi_kembali_persen','Label persen kembali (manual)','text','Anak (33,7%)'],['kpi_cakupan','Cakupan wilayah','text','100%'],
+  ['kpi_cakupan_desc','Keterangan cakupan','text','190 Desa & Kelurahan terhubung sistem pelaporan lapangan.'],['kpi_sla','Standar layanan (SLA)','text','< 48 Jam'],
+  ['kpi_sla_desc','Keterangan SLA','text','Waktu respons kunjungan verifikasi awal sejak aduan masuk.']]},
+ {t:'Catatan Lapangan Pokja',f:[['catatan_lokasi','Lokasi','text','KECAMATAN TEMPE, KAB. WAJO'],
+  ['catatan_quote','Kutipan cerita','area','"Andi R. (14 tahun) sempat 2 tahun berhenti sekolah untuk membantu memetik cabai di kebun demi menopang keluarga. Melalui laporan kepala dusun di portal SIP-ATS Wajo, kini ia telah terdaftar kembali di SMP Terbuka Sengkang dengan bantuan beasiswa perlengkapan penuh."'],
+  ['catatan_sumber','Sumber / penutur','text','— Koordinator Satgas ATS UPTD Pendidikan Wilayah Tempe'],['catatan_foto_url','URL foto (https://…)','url','']]},
+ {t:'Kontak & Alamat (tampil di kartu kontak, formulir laporan, dan footer)',f:[['kontak_call','Teks Call Center (Beranda)','text','(0485) 21102 / Layanan ATS'],['kontak_telp','Telepon kantor (formulir)','text','(0485) 21102'],
+  ['kontak_wa','WhatsApp Satgas (formulir)','text','0811-4200-989'],['alamat','Alamat footer','area','Jl Jend Ahmad Yani, Paddupa, Kec. Tempe, Kabupaten Wajo, Sulawesi Selatan 90914.']]}
+];
+
+const S={api:'',token:'',user:null,view:'ringkasan',q:{status:'SEMUA',search:'',kecamatan:'',page:1},m:{search:'',kecamatan:'',status:'',page:1},cache:{}};
+const $=id=>document.getElementById(id);
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtN=n=>Number(n||0).toLocaleString('id-ID');
+const fmtDT=i=>{const d=new Date(i);return isNaN(d)?esc(i):d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})+', '+d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});};
+const age=t=>{const d=new Date(String(t).slice(0,10));if(isNaN(d))return '-';const n=new Date();let a=n.getFullYear()-d.getFullYear();if(n.getMonth()<d.getMonth()||(n.getMonth()===d.getMonth()&&n.getDate()<d.getDate()))a--;return a;};
+const val=id=>{const e=$(id);return e?(e.type==='checkbox'?e.checked:e.value.trim()):'';};
+const opt=(arr,sel,blank)=>(blank!==undefined?`<option value="">${esc(blank)}</option>`:'')+arr.map(x=>`<option ${x===sel?'selected':''}>${esc(x)}</option>`).join('');
+const inp='w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white';
+const lbl='text-xs font-semibold text-slate-700 block mb-1';
+const btn='text-xs font-semibold rounded px-3 py-2 ';
+const btnP=btn+'bg-civic-600 hover:bg-blue-800 text-white disabled:opacity-50', btnO=btn+'border border-slate-200 hover:bg-slate-50 bg-white', btnD=btn+'border border-red-200 text-red-700 bg-red-50 hover:bg-red-100';
+
+function toast(msg,err){const t=document.createElement('div');t.className='px-4 py-2.5 rounded shadow-lg text-xs font-semibold text-white '+(err?'bg-red-600':'bg-emerald-600');t.textContent=msg;$('toast').appendChild(t);setTimeout(()=>t.remove(),3500);}
+function openModal(title,body,foot){$('mTitle').textContent=title;$('mBody').innerHTML=body;$('mFoot').innerHTML=foot||'';$('modal').classList.remove('hidden');}
+function closeModal(){$('modal').classList.add('hidden');}
+
+async function api(action,body){
+  let res;
+  try{res=await fetch(S.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:S.token},body||{}))});}
+  catch(e){throw new Error('Tidak dapat terhubung ke server. Periksa URL Web App dan koneksi internet.');}
+  let j;try{j=await res.json();}catch(e){throw new Error('Respons server tidak valid. Pastikan URL Web App benar dan akses diset "Anyone".');}
+  if(j.code==='SESI_HABIS'){logout(true);throw new Error('Sesi berakhir, silakan masuk kembali.');}
+  if(j.error)throw new Error(j.error);
+  return j;
+}
+async function act(fn,okMsg){try{const r=await fn();if(okMsg)toast(okMsg);return r;}catch(e){toast(e.message,true);return null;}}
+
+// ---------- AUTH ----------
+function showLogin(msg){$('app').classList.add('hidden');$('app').classList.remove('lg:flex');$('loginScreen').classList.remove('hidden');if(msg){$('loginErr').textContent=msg;$('loginErr').classList.remove('hidden');}}
+function enterApp(){
+  $('loginScreen').classList.add('hidden');$('app').classList.remove('hidden');$('app').classList.add('lg:flex');
+  $('uName').textContent=S.user.nama;$('uRole').textContent=S.user.role;
+  $('nav').innerHTML=NAV.filter(n=>n.roles.includes(S.user.role)).map(n=>`<a href="#${n.id}" data-v="${n.id}" class="nav-i flex items-center gap-3 px-3 py-2.5 rounded text-sm text-slate-300 hover:bg-civic-850"><span class="material-symbols-outlined">${n.icon}</span>${esc(n.label)}</a>`).join('');
+  const first=NAV.find(n=>n.roles.includes(S.user.role)).id, h=location.hash.slice(1);
+  go(NAV.some(n=>n.id===h&&n.roles.includes(S.user.role))?h:first);
+}
+async function doLogin(){
+  if(!S.api){showLogin('Konfigurasi koneksi server tidak tersedia. Hubungi pengelola situs.');return;}
+  $('btnLogin').disabled=true;$('loginErr').classList.add('hidden');
+  try{const r=await api('login',{username:val('lUser'),password:$('lPass').value});
+    if(!r.success)throw new Error(r.error);
+    S.token=r.token;S.user=r.user;sessionStorage.setItem('sipats_tok',r.token);sessionStorage.setItem('sipats_user',JSON.stringify(r.user));enterApp();
+  }catch(e){showLogin(e.message);}finally{$('btnLogin').disabled=false;$('lPass').value='';}
+}
+function logout(silent){
+  if(S.token&&!silent)fetch(S.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'logout',token:S.token})}).catch(()=>{});
+  S.token='';S.user=null;sessionStorage.removeItem('sipats_tok');sessionStorage.removeItem('sipats_user');closeModal();showLogin(silent?'Sesi berakhir, silakan masuk kembali.':'');
+}
+
+// ---------- ROUTER ----------
+const V={};
+function go(v){
+  S.view=v;const n=NAV.find(x=>x.id===v);$('viewTitle').textContent=n?n.label:'';history.replaceState(null,'','#'+v);
+  document.querySelectorAll('.nav-i').forEach(a=>{const on=a.dataset.v===v;a.className='nav-i flex items-center gap-3 px-3 py-2.5 rounded text-sm '+(on?'bg-civic-600 text-white font-semibold':'text-slate-300 hover:bg-civic-850');});
+  $('sidebar').classList.add('-translate-x-full');$('scrim').classList.add('hidden');
+  $('main').innerHTML='<div class="text-xs text-slate-400 p-6 text-center">Memuat…</div>';
+  V[v]();
+}
+
+// ---------- RINGKASAN ----------
+V.ringkasan=async function(){
+  const d=await act(()=>api('dashboard'));if(!d)return;
+  const card=(l,v,c,ic,sub)=>`<div class="bg-white border border-slate-200 rounded-lg p-5"><div class="flex items-center justify-between"><span class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">${l}</span><span class="material-symbols-outlined ${c}">${ic}</span></div><div class="text-3xl font-extrabold mt-2">${fmtN(v)}</div><div class="text-[11px] text-slate-500 mt-1">${sub}</div></div>`;
+  const maxT=Math.max(1,...d.trend.map(x=>x.jumlah)), maxK=Math.max(1,...d.perKecamatan.map(x=>x.laporan+x.terverifikasi)), maxF=Math.max(1,...d.faktor.map(x=>x.jumlah));
+  $('main').innerHTML=`
+  ${d.overdue?`<div class="bg-ochre-50 border-l-4 border-ochre-500 rounded p-4 mb-5 flex items-center justify-between gap-3 flex-wrap"><div class="text-sm"><b class="text-ochre-700">Peringatan SLA:</b> ${fmtN(d.overdue)} laporan menunggu lebih dari 36 jam. Segera tugaskan Tim Penilik UPTD.</div><button class="${btnP}" onclick="S.q.status='PENDING';go('verifikasi')">Tindaklanjuti</button></div>`:''}
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+   ${card('Laporan Masuk',d.counts.SEMUA,'text-civic-600','inbox','Total seluruh tiket')}
+   ${card('Pending Survei',d.counts.PENDING,'text-amber-500','hourglass_top','Belum ditugaskan')}
+   ${card('Ditindaklanjuti UPTD',d.counts.DITUGASKAN_UPTD,'text-blue-500','directions_walk','Sedang disurvei')}
+   ${card('Terdata (Master)',d.masterTotal,'text-emerald-600','verified',fmtN(d.kembali)+' kembali bersekolah')}
+  </div>
+  <div class="grid lg:grid-cols-3 gap-5 mb-5">
+   <div class="bg-white border border-slate-200 rounded-lg p-5 lg:col-span-2"><h3 class="text-sm font-bold mb-4">Laporan masuk 14 hari terakhir</h3>
+    <div class="flex items-end gap-1.5 h-40">${d.trend.map(x=>`<div class="flex-1 flex flex-col items-center justify-end h-full" title="${esc(x.tanggal)}: ${x.jumlah}"><span class="text-[10px] text-slate-500">${x.jumlah||''}</span><div class="w-full bg-civic-600 rounded-t" style="height:${Math.max(x.jumlah/maxT*100,x.jumlah?4:1)}%"></div></div>`).join('')}</div>
+    <div class="flex gap-1.5 mt-1">${d.trend.map(x=>`<div class="flex-1 text-center text-[9px] text-slate-400">${esc(x.tanggal.slice(8))}</div>`).join('')}</div></div>
+   <div class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-3">Kualitas data</h3><div class="text-3xl font-extrabold">${d.nikValidPct}%</div><p class="text-[11px] text-slate-500 mt-1">Laporan dengan NIK 16 digit valid secara format. Pencocokan resmi ke SIAK Dukcapil dilakukan manual oleh verifikator.</p></div>
+  </div>
+  <div class="grid lg:grid-cols-2 gap-5 mb-5">
+   <div class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-4">Sebaran per kecamatan</h3><div class="space-y-3">${d.perKecamatan.slice(0,8).map(x=>`<div><div class="flex justify-between text-xs mb-1"><span class="font-semibold">${esc(x.kecamatan)}</span><span class="font-mono text-slate-600">${x.laporan} laporan · ${x.terverifikasi} terdata</span></div><div class="h-2.5 bg-slate-100 rounded overflow-hidden"><div class="h-full bg-civic-600" style="width:${(x.laporan+x.terverifikasi)/maxK*100}%"></div></div></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>'}</div></div>
+   <div class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-4">Faktor penyebab (dari laporan)</h3><div class="space-y-3">${d.faktor.slice(0,8).map(x=>`<div><div class="flex justify-between text-xs mb-1"><span class="font-semibold">${esc(x.faktor)}</span><span class="font-mono">${x.jumlah}</span></div><div class="h-2.5 bg-slate-100 rounded overflow-hidden"><div class="h-full bg-ochre-500" style="width:${x.jumlah/maxF*100}%"></div></div></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>'}</div></div>
+  </div>
+  <div class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-3">Aktivitas petugas terbaru</h3>${d.audit.map(a=>`<div class="flex gap-3 text-xs py-1.5 border-b border-slate-50"><span class="font-mono text-slate-400 shrink-0">${fmtDT(a.Timestamp)}</span><span><b>${esc(a.Petugas)}</b> · ${esc(a.Aksi)} ${esc(a.Detail)}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada aktivitas.</p>'}</div>`;
+};
+
+// ---------- VERIFIKASI ----------
+let qTimer;
+V.verifikasi=async function(){
+  const r=await act(()=>api('queue',{status:S.q.status,search:S.q.search,kecamatan:S.q.kecamatan,page:S.q.page,pageSize:10}));if(!r)return;
+  S.cache.queue=r.data;const c=r.counts;
+  const tabs=[['SEMUA','Semua Antrean'],['PENDING','Pending Survei'],['DITUGASKAN_UPTD','Ditindaklanjuti UPTD'],['VERIFIKASI_VALID','Selesai / Valid'],['REJECTED','Ditolak']];
+  $('main').innerHTML=`
+  ${c.PENDING?`<div class="bg-ochre-50 border-l-4 border-ochre-500 rounded p-3 mb-4 text-sm"><b class="text-ochre-700">SLA 48 jam:</b> ${fmtN(c.PENDING)} laporan belum ditugaskan. Prioritaskan yang menunggu lebih dari 36 jam.</div>`:''}
+  <div class="bg-white border border-slate-200 rounded-lg p-4 mb-4 flex flex-wrap gap-2 items-center">
+   ${tabs.map(t=>`<button onclick="S.q.status='${t[0]}';S.q.page=1;V.verifikasi()" class="${btn}${S.q.status===t[0]?'bg-civic-600 text-white':'bg-slate-100 text-slate-600'}">${t[1]} <span class="opacity-70">${fmtN(c[t[0]])}</span></button>`).join('')}
+   <input id="qs" class="${inp} !w-48" placeholder="Cari NIK, nama, tiket…" value="${esc(S.q.search)}" oninput="clearTimeout(qTimer);qTimer=setTimeout(()=>{S.q.search=this.value.trim();S.q.page=1;V.verifikasi();},450)">
+   <select class="${inp} !w-40" onchange="S.q.kecamatan=this.value;S.q.page=1;V.verifikasi()">${opt(KEC,S.q.kecamatan,'Semua Kecamatan')}</select>
+   <button class="${btnO}" onclick="exportData('laporan')"><span class="material-symbols-outlined !text-base align-middle">grid_on</span> Ekspor Excel</button>
+   <button class="${btnO}" onclick="V.verifikasi()"><span class="material-symbols-outlined !text-base align-middle">sync</span> Segarkan</button>
+  </div>
+  <div class="space-y-3">${r.data.map((x,i)=>{const st=STAT_LAP[x.Status_SLA]||[x.Status_SLA,'bg-slate-100 text-slate-600'];const j=x.JamMenunggu;
+   const sla=j==null?'':(j>48?`<span class="text-[11px] font-semibold text-red-600">Lewat SLA (${j} jam)</span>`:j>36?`<span class="text-[11px] font-semibold text-amber-600">Sisa ${48-j} jam</span>`:`<span class="text-[11px] text-slate-500">${j} jam menunggu</span>`);
+   return `<div class="bg-white border border-slate-200 rounded-lg p-4 grid sm:grid-cols-12 gap-3 items-center">
+    <div class="sm:col-span-3"><div class="text-xs font-bold text-civic-600 font-mono">${esc(x.ID_Tiket)}</div><div class="text-[11px] text-slate-500">${fmtDT(x.Timestamp)}</div><div class="text-[10px] mt-1 inline-block bg-slate-100 px-2 py-0.5 rounded">${esc(x.Sumber_Laporan)}</div></div>
+    <div class="sm:col-span-3"><div class="text-sm font-bold">${esc(x.Nama_Anak)}</div><div class="text-[11px] font-mono text-slate-600">${esc(x.NIK_Anak)}</div><div class="text-[11px] text-slate-500">${age(x.Tanggal_Lahir)} th · ${esc(x.Jenis_Kelamin)}</div></div>
+    <div class="sm:col-span-3"><div class="text-xs font-semibold">Kec. ${esc(x.Kecamatan)}</div><div class="text-[11px] text-slate-500">${esc(x.Kelurahan_Desa)}</div><div class="text-[11px] text-red-700">${esc(x.Faktor_Penyebab)}</div></div>
+    <div class="sm:col-span-3 flex sm:flex-col gap-2 sm:items-end items-center justify-between"><div class="text-right"><span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold ${st[1]}">${esc(st[0])}</span><div>${sla}</div></div><button class="${btnP}" onclick="openLaporan(${i})">Detail & Tindakan</button></div></div>`;}).join('')||'<div class="bg-white border border-slate-200 rounded-lg p-8 text-center text-xs text-slate-400">Tidak ada laporan pada filter ini.</div>'}</div>
+  ${pager(r,'S.q.page','V.verifikasi')}`;
+};
+function pager(r,pageVar,fn){return `<div class="flex items-center justify-between mt-4 text-xs text-slate-500"><span>${fmtN(r.total)} data · halaman ${r.page}/${r.totalPages}</span><div class="flex gap-2"><button class="${btnO}" ${r.page<=1?'disabled':''} onclick="${pageVar}=${r.page-1};${fn}()">Sebelumnya</button><button class="${btnO}" ${r.page>=r.totalPages?'disabled':''} onclick="${pageVar}=${r.page+1};${fn}()">Berikutnya</button></div></div>`;}
+function openLaporan(i){
+  const x=S.cache.queue[i];
+  const row=(k,v)=>`<div><div class="text-[10px] uppercase tracking-wide text-slate-400">${k}</div><div class="text-sm">${v||'-'}</div></div>`;
+  const wa='https://wa.me/'+String(x.No_WA_Pelapor).replace(/\D/g,'').replace(/^0/,'62');
+  openModal(x.ID_Tiket+' — '+x.Nama_Anak,`
+   <div class="grid grid-cols-2 gap-3 mb-4">${row('NIK',`<span class="font-mono">${esc(x.NIK_Anak)}</span>`)}${row('Tgl lahir / usia',esc(String(x.Tanggal_Lahir).slice(0,10))+' ('+age(x.Tanggal_Lahir)+' th)')}${row('Jenjang terakhir',esc(x.Jenjang_Pendidikan_Terakhir))}${row('Wilayah',esc(x.Kecamatan+' / '+x.Kelurahan_Desa))}
+    <div class="col-span-2">${row('Alamat / patokan',esc(x.Alamat_Rinci_Patokan))}</div><div class="col-span-2">${row('Faktor penyebab',esc(x.Faktor_Penyebab))}</div><div class="col-span-2">${row('Catatan observasi',esc(x.Catatan_Observasi))}</div>
+    ${row('Pelapor',esc(x.Nama_Pelapor)+' ('+esc(x.Hubungan_Pelapor)+')')}${row('WhatsApp',`<a class="text-emerald-700 font-semibold" target="_blank" rel="noopener" href="${wa}">${esc(x.No_WA_Pelapor)} ↗</a>`)}</div>
+   <div class="border-t border-slate-100 pt-4 grid grid-cols-2 gap-3">
+    <div><label class="${lbl}">Status</label><select id="fStatus" class="${inp}" onchange="$('validBox').classList.toggle('hidden',this.value!=='VERIFIKASI_VALID')">${Object.keys(STAT_LAP).map(k=>`<option value="${k}" ${k===x.Status_SLA?'selected':''}>${STAT_LAP[k][0]}</option>`).join('')}</select></div>
+    <div><label class="${lbl}">Ditugaskan ke</label><input id="fAssign" class="${inp}" placeholder="UPTD Wilayah Tempe" value="${esc(x.Ditugaskan_Ke)}"></div>
+    <div id="validBox" class="col-span-2 grid grid-cols-2 gap-3 ${x.Status_SLA==='VERIFIKASI_VALID'?'':'hidden'}"><div><label class="${lbl}">Status intervensi (direktori publik)</label><select id="fInt" class="${inp}">${opt(STAT_INT,'Verifikasi Valid')}</select></div><div><label class="${lbl}">Mitra pendidikan</label><input id="fMitra" class="${inp}" placeholder="PKBM / sekolah"></div>
+     <p class="col-span-2 text-[11px] text-slate-500">Saat disimpan sebagai Valid, data disalin ke Master Data dengan nama & NIK disamarkan untuk direktori publik.</p></div>
+    <div class="col-span-2"><label class="${lbl}">Catatan verifikator</label><textarea id="fNote" rows="2" class="${inp}">${esc(x.Catatan_Verifikator)}</textarea></div></div>`,
+   `${S.user.role==='superadmin'?`<button class="${btnD} mr-auto" onclick="delLaporan('${esc(x.ID_Tiket)}')">Hapus</button>`:''}<button class="${btnO}" onclick="closeModal()">Batal</button><button class="${btnP}" onclick="saveLaporan('${esc(x.ID_Tiket)}')">Simpan</button>`);
+}
+async function saveLaporan(id){
+  const st=val('fStatus'),b={idTiket:id,statusSLA:st,ditugaskanKe:val('fAssign'),catatanVerifikator:val('fNote')};
+  if(st==='VERIFIKASI_VALID'){b.statusIntervensi=val('fInt');b.mitraPendidikan=val('fMitra');}
+  const r=await act(()=>api('updateStatus',b),'Tersimpan.');if(r){closeModal();V.verifikasi();}
+}
+async function delLaporan(id){if(!confirm('Hapus permanen laporan '+id+'?'))return;const r=await act(()=>api('deleteLaporan',{idTiket:id}),'Dihapus.');if(r){closeModal();V.verifikasi();}}
+
+// ---------- MASTER ----------
+let mTimer;
+V.master=async function(){
+  const r=await act(()=>api('masterList',{search:S.m.search,kecamatan:S.m.kecamatan,status:S.m.status,page:S.m.page,pageSize:10}));if(!r)return;
+  S.cache.master=r.data;
+  $('main').innerHTML=`<div class="bg-white border border-slate-200 rounded-lg p-4 mb-4 flex flex-wrap gap-2 items-center">
+   <input class="${inp} !w-56" placeholder="Cari NIK, nama, ID registrasi…" value="${esc(S.m.search)}" oninput="clearTimeout(mTimer);mTimer=setTimeout(()=>{S.m.search=this.value.trim();S.m.page=1;V.master();},450)">
+   <select class="${inp} !w-40" onchange="S.m.kecamatan=this.value;S.m.page=1;V.master()">${opt(KEC,S.m.kecamatan,'Semua Kecamatan')}</select>
+   <select class="${inp} !w-48" onchange="S.m.status=this.value;S.m.page=1;V.master()">${opt(['Verifikasi Valid','Binaan UPTD','Diusulkan Beasiswa','Kembali Bersekolah'],S.m.status,'Semua Status')}</select>
+   <button class="${btnP} ml-auto" onclick="openMaster(-1)">+ Tambah Data</button><button class="${btnO}" onclick="exportData('master')">Ekspor Excel</button></div>
+   <div class="bg-white border border-slate-200 rounded-lg overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-slate-50 text-[11px] uppercase text-slate-500"><tr>${['ID','Nama Lengkap','NIK','Usia','Wilayah','Status','Mitra',''].map(h=>`<th class="px-4 py-3">${h}</th>`).join('')}</tr></thead>
+   <tbody class="divide-y divide-slate-100">${r.data.map((x,i)=>`<tr class="hover:bg-slate-50"><td class="px-4 py-3 font-mono">${esc(x.ID_Registrasi)}</td><td class="px-4 py-3 font-semibold">${esc(x.Nama_Lengkap)}</td><td class="px-4 py-3 font-mono">${esc(x.NIK_Full)}</td><td class="px-4 py-3">${esc(x.Usia)}</td><td class="px-4 py-3">${esc(x.Kecamatan)}, ${esc(x.Kelurahan_Desa)}</td><td class="px-4 py-3"><span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-[11px] font-semibold">${esc(x.Status_Intervensi)}</span></td><td class="px-4 py-3">${esc(x.Mitra_Pendidikan)}</td><td class="px-4 py-3 text-right whitespace-nowrap"><button class="${btnO}" onclick="openMaster(${i})">Ubah</button></td></tr>`).join('')||'<tr><td colspan="8" class="px-4 py-8 text-center text-slate-400">Belum ada data.</td></tr>'}</tbody></table></div>${pager(r,'S.m.page','V.master')}`;
+};
+function openMaster(i){
+  const x=i<0?{}:S.cache.master[i];
+  openModal(i<0?'Tambah Data ATS':'Ubah '+x.ID_Registrasi,`<div class="grid grid-cols-2 gap-3">
+   <div class="col-span-2"><label class="${lbl}">NIK (16 digit) *</label><input id="mNik" class="${inp} font-mono" maxlength="16" value="${esc(x.NIK_Full)}"></div>
+   <div class="col-span-2"><label class="${lbl}">Nama lengkap *</label><input id="mNama" class="${inp}" value="${esc(x.Nama_Lengkap)}"></div>
+   <div><label class="${lbl}">Tanggal lahir</label><input id="mTgl" type="date" class="${inp}" value="${esc(String(x.Tanggal_Lahir||'').slice(0,10))}"></div>
+   <div><label class="${lbl}">Jenis kelamin</label><select id="mJk" class="${inp}">${opt(['Laki-laki','Perempuan'],x.Jenis_Kelamin)}</select></div>
+   <div><label class="${lbl}">Kecamatan *</label><select id="mKec" class="${inp}">${opt(KEC,x.Kecamatan)}</select></div>
+   <div><label class="${lbl}">Kelurahan / Desa</label><input id="mDesa" class="${inp}" value="${esc(x.Kelurahan_Desa)}"></div>
+   <div class="col-span-2"><label class="${lbl}">Faktor kendala</label><input id="mFak" class="${inp}" value="${esc(x.Faktor_Kendala)}"></div>
+   <div><label class="${lbl}">Status intervensi</label><select id="mSt" class="${inp}">${opt(STAT_INT,x.Status_Intervensi)}</select></div>
+   <div><label class="${lbl}">Mitra pendidikan</label><input id="mMitra" class="${inp}" value="${esc(x.Mitra_Pendidikan)}"></div></div>
+   <p class="text-[11px] text-slate-500 mt-3">Nama dan NIK untuk direktori publik disamarkan otomatis.</p>`,
+   `${i>=0&&S.user.role==='superadmin'?`<button class="${btnD} mr-auto" onclick="delMaster('${esc(x.ID_Registrasi)}')">Hapus</button>`:''}<button class="${btnO}" onclick="closeModal()">Batal</button><button class="${btnP}" onclick="saveMaster('${esc(x.ID_Registrasi||'')}')">Simpan</button>`);
+}
+async function saveMaster(id){
+  const rec={ID_Registrasi:id,NIK_Full:val('mNik'),Nama_Lengkap:val('mNama'),Tanggal_Lahir:val('mTgl'),Jenis_Kelamin:val('mJk'),Kecamatan:val('mKec'),Kelurahan_Desa:val('mDesa'),Faktor_Kendala:val('mFak'),Status_Intervensi:val('mSt'),Mitra_Pendidikan:val('mMitra')};
+  const r=await act(async()=>{const j=await api('masterSave',{record:rec});if(!j.success)throw new Error(j.error);return j;},'Tersimpan.');if(r){closeModal();V.master();}
+}
+async function delMaster(id){if(!confirm('Hapus data '+id+' dari direktori?'))return;const r=await act(()=>api('masterDelete',{id}),'Dihapus.');if(r){closeModal();V.master();}}
+
+// ---------- PROGRAM ----------
+V.program=async function(){
+  const r=await act(()=>api('programList'));if(!r)return;S.cache.prog=r.data;
+  $('main').innerHTML=`<div class="flex justify-between items-center mb-4"><p class="text-xs text-slate-500">Kelola program pemulihan (Paket A/B/C, beasiswa perlengkapan, SMP Terbuka, dll).</p><button class="${btnP}" onclick="openProg(-1)">+ Tambah Program</button></div>
+  <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">${r.data.map((p,i)=>{const pct=p.Kuota?Math.min(100,Math.round(p.Terisi/p.Kuota*100)):0;return `<div class="bg-white border border-slate-200 rounded-lg p-5"><div class="flex justify-between gap-2"><div><div class="text-[10px] font-mono text-slate-400">${esc(p.ID_Program)}</div><div class="text-sm font-bold">${esc(p.Nama_Program)}</div><div class="text-[11px] text-slate-500">${esc(p.Jenis)} · ${esc(p.Mitra_Pelaksana)}</div></div><span class="h-fit text-[10px] font-bold px-2 py-1 rounded-full ${p.Status==='Aktif'?'bg-emerald-50 text-emerald-700':'bg-slate-100 text-slate-600'}">${esc(p.Status)}</span></div>
+   <div class="mt-4 text-xs flex justify-between"><span>Terisi ${fmtN(p.Terisi)} / ${fmtN(p.Kuota)}</span><span class="font-mono">${pct}%</span></div><div class="h-2 bg-slate-100 rounded mt-1 overflow-hidden"><div class="h-full bg-emerald-500" style="width:${pct}%"></div></div>
+   <p class="text-[11px] text-slate-500 mt-3">${esc(p.Keterangan)}</p><div class="mt-3 text-[11px] text-slate-400">${esc(p.Periode)}</div><div class="mt-3 flex gap-2"><button class="${btnO}" onclick="openProg(${i})">Ubah</button>${S.user.role==='superadmin'?`<button class="${btnD}" onclick="delProg('${esc(p.ID_Program)}')">Hapus</button>`:''}</div></div>`;}).join('')||'<div class="col-span-full bg-white border border-slate-200 rounded-lg p-8 text-center text-xs text-slate-400">Belum ada program.</div>'}</div>`;
+};
+function openProg(i){const p=i<0?{Status:'Aktif'}:S.cache.prog[i];
+  openModal(i<0?'Tambah Program':'Ubah '+p.ID_Program,`<div class="grid grid-cols-2 gap-3">
+   <div class="col-span-2"><label class="${lbl}">Nama program *</label><input id="pNama" class="${inp}" value="${esc(p.Nama_Program)}"></div>
+   <div><label class="${lbl}">Jenis</label><select id="pJenis" class="${inp}">${opt(['Kesetaraan (Paket A/B/C)','Beasiswa Perlengkapan','Sekolah Terbuka','Transportasi/Antar-Jemput','Lainnya'],p.Jenis)}</select></div>
+   <div><label class="${lbl}">Mitra pelaksana</label><input id="pMitra" class="${inp}" value="${esc(p.Mitra_Pelaksana)}"></div>
+   <div><label class="${lbl}">Kuota</label><input id="pKuota" type="number" min="0" class="${inp}" value="${esc(p.Kuota)}"></div><div><label class="${lbl}">Terisi</label><input id="pTerisi" type="number" min="0" class="${inp}" value="${esc(p.Terisi)}"></div>
+   <div><label class="${lbl}">Status</label><select id="pStatus" class="${inp}">${opt(['Aktif','Selesai','Ditutup'],p.Status)}</select></div><div><label class="${lbl}">Periode</label><input id="pPeriode" class="${inp}" placeholder="Tahun ajaran 2026/2027" value="${esc(p.Periode)}"></div>
+   <div class="col-span-2"><label class="${lbl}">Keterangan</label><textarea id="pKet" rows="2" class="${inp}">${esc(p.Keterangan)}</textarea></div></div>`,
+  `<button class="${btnO}" onclick="closeModal()">Batal</button><button class="${btnP}" onclick="saveProg('${esc(p.ID_Program||'')}')">Simpan</button>`);}
+async function saveProg(id){const rec={ID_Program:id,Nama_Program:val('pNama'),Jenis:val('pJenis'),Mitra_Pelaksana:val('pMitra'),Kuota:val('pKuota'),Terisi:val('pTerisi'),Status:val('pStatus'),Periode:val('pPeriode'),Keterangan:val('pKet')};
+  const r=await act(async()=>{const j=await api('programSave',{record:rec});if(!j.success)throw new Error(j.error);return j;},'Tersimpan.');if(r){closeModal();V.program();}}
+async function delProg(id){if(!confirm('Hapus program '+id+'?'))return;const r=await act(()=>api('programDelete',{id}),'Dihapus.');if(r)V.program();}
+
+// ---------- LAPORAN & STATISTIK ----------
+V.laporan=async function(){
+  const d=await act(()=>api('dashboard'));if(!d)return;S.cache.dash=d;
+  $('main').innerHTML=`<div class="flex flex-wrap gap-2 mb-4"><button class="${btnP}" onclick="exportData('laporan')">Unduh Data Laporan Masuk (.xlsx)</button><button class="${btnP}" onclick="exportData('master')">Unduh Master Data ATS (.xlsx)</button><button class="${btnO}" onclick="exportSummary()">Unduh Rekap per Kecamatan</button><button class="${btnO}" onclick="window.print()">Cetak</button></div>
+  <div class="bg-white border border-slate-200 rounded-lg overflow-x-auto"><table class="w-full text-xs text-left"><thead class="bg-slate-50 text-[11px] uppercase text-slate-500"><tr><th class="px-4 py-3">Kecamatan</th><th class="px-4 py-3 text-right">Laporan masuk</th><th class="px-4 py-3 text-right">Terdata (master)</th></tr></thead><tbody class="divide-y divide-slate-100">
+  ${d.perKecamatan.map(x=>`<tr><td class="px-4 py-2.5 font-semibold">${esc(x.kecamatan)}</td><td class="px-4 py-2.5 text-right font-mono">${x.laporan}</td><td class="px-4 py-2.5 text-right font-mono">${x.terverifikasi}</td></tr>`).join('')||'<tr><td colspan="3" class="px-4 py-8 text-center text-slate-400">Belum ada data.</td></tr>'}
+  </tbody></table></div><div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mt-4">${Object.keys(STAT_LAP).concat(['SEMUA']).map(k=>`<div class="bg-white border border-slate-200 rounded-lg p-4"><div class="text-[10px] uppercase text-slate-400">${k==='SEMUA'?'Total':STAT_LAP[k][0]}</div><div class="text-2xl font-extrabold">${fmtN(d.counts[k])}</div></div>`).join('')}</div>`;
+};
+function exportSummary(){exportRows(S.cache.dash.perKecamatan.map(x=>({Kecamatan:x.kecamatan,Laporan_Masuk:x.laporan,Terdata:x.terverifikasi})),'rekap_kecamatan');}
+async function exportData(type){const r=await act(()=>api('report',{type}));if(r)exportRows(r.data,type==='laporan'?'data_laporan_masuk':'master_data_ats');}
+function loadXLSX(){return new Promise((res,rej)=>{if(window.XLSX)return res();const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
+async function exportRows(rows,name){
+  if(!rows.length){toast('Tidak ada data untuk diekspor.',true);return;}
+  const safe=v=>{v=v==null?'':String(v);return /^[=+\-@]/.test(v)?"'"+v:v;};
+  const clean=rows.map(r=>{const o={};Object.keys(r).forEach(k=>o[k]=safe(r[k]));return o;});
+  const stamp=new Date().toISOString().slice(0,10);
+  try{await loadXLSX();const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(clean),'Data');XLSX.writeFile(wb,`${name}_${stamp}.xlsx`);}
+  catch(e){const cols=Object.keys(clean[0]);const csv='\ufeff'+[cols.join(',')].concat(clean.map(r=>cols.map(c=>'"'+String(r[c]).replace(/"/g,'""')+'"').join(','))).join('\r\n');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=`${name}_${stamp}.csv`;a.click();toast('Pustaka Excel tidak termuat, diunduh sebagai CSV (dapat dibuka di Excel).');}
+}
+
+// ---------- KELOLA BERANDA ----------
+V.beranda=async function(){
+  let cfg={};try{const res=await fetch(S.api+'?action=config&_='+Date.now());cfg=await res.json();}catch(e){toast('Gagal memuat pengaturan saat ini.',true);}
+  $('main').innerHTML=`<div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-5 text-xs text-blue-900">Ubah teks, foto, angka KPI, pengumuman, dan kontak halaman Beranda. <b>Kosongkan kolom untuk memakai teks bawaan.</b> Perubahan tampil di situs publik dalam ±1 menit. Foto: tempel URL gambar <b>https://</b> (mis. dari Google Drive publik / hosting gambar).</div>
+  <form id="cmsForm" class="space-y-5" onsubmit="return false">${CMS.map(sec=>`<section class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-1">${esc(sec.t)}</h3>${sec.note?`<p class="text-[11px] text-slate-500 mb-3">${esc(sec.note)}</p>`:'<div class="mb-3"></div>'}<div class="grid md:grid-cols-2 gap-4">${sec.f.map(([k,l,t,d])=>{const v=cfg[k]||'';let c;
+    if(t==='toggle')c=`<label class="flex items-center gap-2 text-sm"><input type="checkbox" id="c_${k}" ${v==='true'?'checked':''}> Aktif</label>`;
+    else if(t==='area')c=`<textarea id="c_${k}" rows="3" class="${inp}" placeholder="${esc(d)}">${esc(v)}</textarea>`;
+    else if(t.startsWith('select:'))c=`<select id="c_${k}" class="${inp}">${opt(t.slice(7).split('|'),v||d)}</select>`;
+    else c=`<input id="c_${k}" class="${inp}" placeholder="${esc(d)}" value="${esc(v)}">`;
+    return `<div class="${t==='area'||k.startsWith('banner')||k.endsWith('url')?'md:col-span-2':''}"><label class="${lbl}">${esc(l)}</label>${c}</div>`;}).join('')}</div></section>`).join('')}
+   <div class="sticky bottom-0 bg-slate-50/90 backdrop-blur py-3 flex gap-2"><button class="${btnP}" onclick="saveCms()">Simpan Perubahan Beranda</button><a class="${btnO}" href="index.html" target="_blank">Pratinjau Beranda ↗</a></div></form>`;
+};
+async function saveCms(){
+  const values={};CMS.forEach(s=>s.f.forEach(([k,,t])=>{const e=$('c_'+k);if(!e)return;values[k]=t==='toggle'?(e.checked?'true':''):e.value.trim();}));
+  for(const k of ['hero_photo_url','catatan_foto_url']){if(values[k]&&!/^https:\/\//i.test(values[k])){toast('URL foto harus diawali https://',true);return;}}
+  const r=await act(()=>api('configSave',{values}),'Beranda diperbarui.');
+}
+
+// ---------- PENGGUNA ----------
+V.pengguna=async function(){
+  const r=await act(()=>api('usersList'));if(!r)return;S.cache.users=r.data;
+  $('main').innerHTML=`<div class="flex justify-between items-center mb-4"><p class="text-xs text-slate-500">Superadmin <span class="font-mono">admin</span> memakai ADMIN_KEY dan tidak tercantum di sini. Peran: <b>verifikator</b> (antrean & master data), <b>editor</b> (Beranda & program), <b>superadmin</b> (semua).</p><button class="${btnP}" onclick="openUser(-1)">+ Tambah Pengguna</button></div>
+  <div class="bg-white border border-slate-200 rounded-lg overflow-x-auto"><table class="w-full text-xs text-left"><thead class="bg-slate-50 text-[11px] uppercase text-slate-500"><tr><th class="px-4 py-3">Username</th><th class="px-4 py-3">Nama</th><th class="px-4 py-3">Peran</th><th class="px-4 py-3">Status</th><th></th></tr></thead><tbody class="divide-y divide-slate-100">
+  ${r.data.map((u,i)=>`<tr><td class="px-4 py-3 font-mono">${esc(u.Username)}</td><td class="px-4 py-3">${esc(u.Nama)}</td><td class="px-4 py-3">${esc(u.Role)}</td><td class="px-4 py-3">${u.Aktif?'Aktif':'Nonaktif'}</td><td class="px-4 py-3 text-right whitespace-nowrap"><button class="${btnO}" onclick="openUser(${i})">Ubah</button> <button class="${btnD}" onclick="delUser('${esc(u.Username)}')">Hapus</button></td></tr>`).join('')||'<tr><td colspan="5" class="px-4 py-8 text-center text-slate-400">Belum ada pengguna tambahan.</td></tr>'}</tbody></table></div>`;
+};
+function openUser(i){const u=i<0?{Role:'verifikator',Aktif:true}:S.cache.users[i];
+  openModal(i<0?'Tambah Pengguna':'Ubah '+u.Username,`<div class="grid grid-cols-2 gap-3"><div><label class="${lbl}">Username *</label><input id="uUser" class="${inp}" ${i>=0?'readonly':''} value="${esc(u.Username)}"></div><div><label class="${lbl}">Nama *</label><input id="uNama" class="${inp}" value="${esc(u.Nama)}"></div>
+   <div><label class="${lbl}">Peran</label><select id="uRole2" class="${inp}">${opt(['verifikator','editor','superadmin'],u.Role)}</select></div><div><label class="${lbl}">Status</label><select id="uAktif" class="${inp}"><option value="1" ${u.Aktif?'selected':''}>Aktif</option><option value="0" ${u.Aktif?'':'selected'}>Nonaktif</option></select></div>
+   <div class="col-span-2"><label class="${lbl}">Kata sandi ${i>=0?'(kosongkan bila tidak diganti)':'*'} — min. 8 karakter</label><input id="uPass" type="password" class="${inp}" autocomplete="new-password"></div></div>`,
+  `<button class="${btnO}" onclick="closeModal()">Batal</button><button class="${btnP}" onclick="saveUser()">Simpan</button>`);}
+async function saveUser(){const rec={Username:val('uUser'),Nama:val('uNama'),Role:val('uRole2'),Aktif:val('uAktif')==='1',Password:$('uPass').value};
+  const r=await act(async()=>{const j=await api('usersSave',{record:rec});if(!j.success)throw new Error(j.error);return j;},'Tersimpan.');if(r){closeModal();V.pengguna();}}
+async function delUser(u){if(!confirm('Hapus pengguna '+u+'?'))return;const r=await act(()=>api('usersDelete',{username:u}),'Dihapus.');if(r)V.pengguna();}
+
+// ---------- SISTEM ----------
+V.sistem=async function(){
+  const a=await act(()=>api('auditList',{limit:100}));if(!a)return;
+  $('main').innerHTML=`<div class="grid lg:grid-cols-3 gap-5"><div class="bg-white border border-slate-200 rounded-lg p-5 lg:col-span-1"><h3 class="text-sm font-bold mb-3">Koneksi Google Sheet</h3><div class="text-[11px] text-slate-500 mb-1">Endpoint Web App</div><div class="text-xs font-mono break-all mb-4">${esc(S.api)}</div>
+   <div class="flex flex-wrap gap-2"><button class="${btnO}" onclick="testPing()">Uji Koneksi</button><button class="${btnO}" onclick="runSetup()">Perbaiki / Buat Sheet</button></div><div id="pingOut" class="text-xs mt-3 text-slate-600"></div>
+   <p class="text-[11px] text-slate-500 mt-4">Tab yang dipakai: Data_Laporan_Masuk, Data_ATS_Terverifikasi, Pengaturan_Beranda, Program_Intervensi, Data_Petugas, Log_Audit_Petugas.</p></div>
+   <div class="bg-white border border-slate-200 rounded-lg p-5 lg:col-span-2"><h3 class="text-sm font-bold mb-3">Log Audit Aktivitas Petugas</h3><div class="max-h-[60vh] overflow-y-auto">${a.data.map(x=>`<div class="flex gap-3 text-xs py-1.5 border-b border-slate-50"><span class="font-mono text-slate-400 shrink-0">${fmtDT(x.Timestamp)}</span><span><b>${esc(x.Petugas)}</b> · ${esc(x.Aksi)} ${esc(x.Detail)}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada log.</p>'}</div></div></div>`;
+};
+async function testPing(){const t=Date.now();const r=await act(()=>api('ping'));if(r)$('pingOut').textContent='Terhubung ✓ · '+(Date.now()-t)+' ms · zona waktu '+r.timezone;}
+async function runSetup(){const r=await act(()=>api('setup'),'Struktur sheet diperiksa/dibuat.');if(r)V.sistem();}
+
+// ---------- INIT ----------
+$('btnLogin').onclick=doLogin;$('btnLogout').onclick=()=>logout(false);
+$('lPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+$('btnMenu').onclick=()=>{$('sidebar').classList.remove('-translate-x-full');$('scrim').classList.remove('hidden');};
+$('scrim').onclick=()=>{$('sidebar').classList.add('-translate-x-full');$('scrim').classList.add('hidden');};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+(async function(){
+  const configuredApi=window.SIP_ATS_CONFIG&&window.SIP_ATS_CONFIG.API_URL;
+  if(typeof configuredApi==='string'&&/^https:\/\/script\.google\.com\/.+\/exec\/?$/.test(configuredApi.trim()))S.api=configuredApi.trim();
+  if(!S.api){$('loginErr').textContent='Konfigurasi koneksi server tidak tersedia. Hubungi pengelola situs.';$('loginErr').classList.remove('hidden');$('btnLogin').disabled=true;}
+  const tok=sessionStorage.getItem('sipats_tok'),u=sessionStorage.getItem('sipats_user');
+  if(tok&&u&&S.api){S.token=tok;S.user=JSON.parse(u);try{await api('me');enterApp();return;}catch(e){}}
+})();
+</script>
+</body></html>
