@@ -1,0 +1,562 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SIP-ATS Kabupaten Wajo | Sistem Informasi Penanganan &amp; Pemulihan Anak Tidak Sekolah</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            civic: {
+              950: '#07101f',
+              900: '#0c1a30',
+              850: '#112240',
+              800: '#1b3252',
+              700: '#23416b',
+              600: '#1d4ed8',
+              500: '#2563eb',
+              100: '#e7eef8',
+              50: '#f4f7fb'
+            },
+            ochre: {
+              700: '#8c4302',
+              600: '#b45309',
+              500: '#d97706',
+              400: '#f59e0b',
+              100: '#fef3c7',
+              50: '#fffbeb'
+            },
+            stonepaper: '#f8fafc'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            editorial: ['"Newsreader"', 'Georgia', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #f8fafc;
+        color: #0c1a30;
+      }
+      body {
+        -webkit-font-smoothing: antialiased;
+      }
+    }
+  </style>
+</head>
+<body class="bg-stonepaper font-sans text-civic-900 antialiased min-h-screen selection:bg-ochre-100 selection:text-ochre-700">
+<!-- Top Government Notice Bar -->
+<aside class="bg-civic-950 text-slate-300 text-xs py-2 px-4 border-b border-civic-850">
+<div class="max-w-[1280px] mx-auto flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="tracking-wide">Portal Resmi Layanan Terpadu Penanganan Anak Tidak Sekolah (ATS) — Pemerintah Kabupaten Wajo</span>
+</div>
+<div class="flex items-center gap-4 text-[11px] text-slate-400 font-mono tracking-tight">
+<span class="">SINKRONISASI DAPODIK &amp; DISDUKCAPIL 2026</span>
+<span class="hidden sm:inline">|</span>
+<span class="hidden sm:inline">ZONA WAKTU: WITA (GMT+8)</span>
+</div>
+</div>
+</aside>
+<!-- Civic Header & Official Branding -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-6">
+<!-- Brand & Municipal Identity -->
+<a class="flex items-center gap-4 group" href="#">
+<img alt="Wajo Cerdas - Logo Resmi" class="h-16 w-auto max-w-[200px] object-contain transition-transform group-hover:scale-[1.02]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPm67mV9v-5wU6SN5n2qhH5UiX5kFVpJExtXX1bXKAWcdKVgWxP4baehkFf9NhdOGAU_wle0R-8zkPrLzqWFFmF2M0PwvCc-g49GCra7UnaReFjjgxLKxcuAiDnoFUo_1bSIGDTMuMIRlrmgO4GzxAGIILVDQM7jbdvFV2e43aq0WWPz6bVlRDKVhDaIMkaQfOeYqt6F7RzS4rq7DENocGyIyM2XLLtoMS7S0yOYREEMMNt1GshTEYxNRyl9RvThLmzA">
+<div class="h-12 w-[1px] bg-slate-200 hidden sm:block"></div>
+<div class="hidden sm:flex flex-col">
+<span class="font-bold tracking-tight text-xs md:text-sm text-civic-900 uppercase">
+            SIP-ATS WAJO
+          </span>
+<span class="text-[12px] font-medium text-slate-600 leading-tight">
+            Sistem Informasi Penanganan &amp; Pemulihan Anak Tidak Sekolah
+          </span>
+<span class="text-[11px] font-semibold text-ochre-700">
+            Dinas Pendidikan &amp; Kebudayaan Kabupaten Wajo
+          </span>
+</div>
+</a>
+<!-- Navigation & Action -->
+<div class="flex items-center gap-6"><nav class="hidden lg:flex items-center gap-1 font-medium text-sm text-slate-700 shrink-0"><a aria-current="page" class="px-3 py-2 text-civic-900 font-semibold border-b-2 border-civic-600 whitespace-nowrap" data-path="beranda" href="index.html">Beranda</a><a class="px-3 py-2 hover:text-civic-600 transition-colors whitespace-nowrap" data-path="direktori-data-ats" href="direktori.html">Direktori Data ATS</a><a class="px-3 py-2 hover:text-civic-600 transition-colors whitespace-nowrap" data-path="laporkan-ats" href="laporkan.html">Laporkan ATS</a></nav><div class="flex items-center gap-3 shrink-0"><a class="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-700 hover:text-civic-900 px-3 py-2 border border-slate-200 rounded whitespace-nowrap" data-path="bantuan-call-center" href="index.html#kontak"><span class="material-symbols-outlined text-[16px] text-ochre-600">headset_mic</span><span class="">Call Center</span></a><a class="inline-flex items-center gap-2 bg-ochre-600 hover:bg-ochre-700 text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded transition-colors shadow-sm whitespace-nowrap" data-path="laporkan-ats" href="laporkan.html"><span class="material-symbols-outlined text-[18px]">campaign</span><span class="">Laporkan Temuan</span></a></div></div>
+</div>
+</header>
+<main class="w-full">
+<!-- Hero Section: Editorial & Dignified Civic Layout -->
+<section class="border-b border-slate-200 bg-white">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+<!-- Editorial Intro Column -->
+<div class="lg:col-span-7 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 text-xs uppercase tracking-widest text-slate-500 font-bold mb-4">
+<span class="text-ochre-700 font-mono"><span data-cms="hero_eyebrow_1">AGENDA DAERAH</span></span>
+<span class="text-slate-300">•</span>
+<span class=""><span data-cms="hero_eyebrow_2">WAJIB BELAJAR 13 TAHUN KABUPATEN WAJO</span></span>
+</div>
+<h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-civic-900 tracking-tight leading-[1.15] mb-6">
+                <span data-cms="hero_title">Gerakan Bersama Menuntaskan Anak Tidak Sekolah di Bumi Lamaddukelleng.</span>
+              </h1>
+<p class="font-editorial text-xl sm:text-2xl text-slate-700 leading-relaxed italic mb-6">
+                <span data-cms="hero_quote">"Setiap anak di Kabupaten Wajo memiliki hak konstitusional untuk bersekolah secara merdeka, tuntas, dan bermartabat tanpa terhalang kemiskinan maupun geografis."</span>
+              </p>
+<p class="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mb-8">
+                <span data-cms="hero_desc">Pemerintah Kabupaten Wajo melalui Dinas Pendidikan dan Kebudayaan menyinergikan seluruh Satgas Kecamatan, UPTD Sekolah, serta Pemerintah Desa untuk mendeteksi, mendampingi, dan mengembalikan anak usia 7–18 tahun ke bangku sekolah formal maupun pendidikan kesetaraan PKBM.</span>
+              </p>
+</div>
+<div class="pt-6 border-t border-slate-200 flex flex-wrap items-center gap-4">
+<a class="inline-flex items-center gap-2 bg-civic-900 hover:bg-civic-850 text-white font-semibold text-sm px-6 py-3 rounded transition-colors" data-path="laporkan-ats" href="laporkan.html">
+<span class="material-symbols-outlined text-[20px] text-ochre-400">campaign</span>
+<span class="">Laporkan Temuan ATS</span>
+</a>
+<a class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-civic-900 font-semibold text-sm px-6 py-3 rounded border border-slate-300 transition-colors" href="#cek-nik">
+<span class="material-symbols-outlined text-[20px] text-slate-700">search</span>
+<span class="">Cek Status NIK Anak</span>
+</a>
+<span class="text-xs text-slate-500 font-mono">VERIFIKASI LAPANGAN BERKALA 2026</span>
+</div>
+</div>
+<!-- Documentary Feature Column -->
+<div class="lg:col-span-5 flex flex-col">
+<div class="h-full border border-slate-200 bg-slate-50 p-3 rounded flex flex-col justify-between">
+<div class="relative overflow-hidden aspect-[4/3] bg-slate-200 border border-slate-200">
+<img data-cms-src="hero_photo_url" alt="Siswa di ruang kelas sekolah dasar di Kabupaten Wajo" class="w-full h-full object-cover grayscale-[15%] contrast-[1.05]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBamBLN688i_QifCLErmSwaFLtAMAueHSVSd9QqR2_ru9hSq_P8vkb00q7bAqiDb6wzsFMzNg8XAOu5WT_p7QOKOKjzzS_ewxLxwp3jQOZ4f62GrEK2bVfTVB1PmE6sx3QD9no_nv7tRHEwClxhx160zZBz16vzQeqigAAyBrpFeW6AlDRPBWZZUG4ejOfUaCPSgp5pyVKi2uP-nLs7Sl8mi2BS-KxG6rIYSftI13NCVbhIxMHlHY7">
+<div class="absolute bottom-0 inset-x-0 bg-civic-950/90 text-white p-3 text-xs border-t border-slate-800">
+<span class="font-mono text-ochre-400 text-[10px] tracking-wider uppercase block">Dokumentasi Program</span>
+                  <span data-cms="hero_photo_caption">Ruang kelas UPTD SD Negeri di Wajo menerima kembali murid binaan afirmasi SIP-ATS.</span>
+                </div>
+</div>
+<!-- Contextual civic note box -->
+<div class="mt-4 p-4 bg-white border border-slate-200">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-ochre-600 text-[20px] shrink-0 mt-0.5">account_balance</span>
+<div>
+<h2 class="text-xs font-bold text-civic-900 uppercase tracking-wide">Fokus Penanganan Terpadu</h2>
+<p class="text-xs text-slate-600 mt-1 leading-normal">
+                      <span data-cms="fokus_text">Intervensi terbagi atas: (1) Penyaluran beasiswa perlengkapan, (2) Advokasi orang tua &amp; komite, (3) Pendaftaran Paket A/B/C gratis di Sanggar Kegiatan Belajar (SKB).</span>
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Asymmetrical Civic Data Strip (KPI Indicators) -->
+<section class="bg-civic-900 text-white border-b border-civic-950 py-10">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-civic-800">
+<!-- KPI 1 -->
+<div class="py-4 sm:py-0 sm:px-6 first:pl-0">
+<span class="text-slate-400 text-xs font-mono tracking-wider uppercase block mb-1">Total ATS Terdata</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-extrabold text-white tracking-tight" id="statTotalTerdata">1.428</span>
+<span class="text-slate-400 text-xs font-medium">Jiwa Teridentifikasi</span>
+</div>
+<p class="text-[12px] text-slate-400 mt-2">
+              Hasil pemutakhiran UPTD &amp; Pemdes per Februari 2026.
+            </p>
+</div>
+<!-- KPI 2 -->
+<div class="py-4 sm:py-0 sm:px-6">
+<span class="text-slate-400 text-xs font-mono tracking-wider uppercase block mb-1">Kembali Bersekolah</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-extrabold text-ochre-400 tracking-tight" id="statKembali">482</span>
+<span class="text-ochre-200 text-xs font-medium" id="statKembaliPersen">Anak (33,7%)</span>
+</div>
+<p class="text-[12px] text-slate-400 mt-2">
+              Re-integrasi tuntas ke SD/SMP formal &amp; PKBM Kesetaraan.
+            </p>
+</div>
+<!-- KPI 3 -->
+<div class="py-4 sm:py-0 sm:px-6">
+<span class="text-slate-400 text-xs font-mono tracking-wider uppercase block mb-1">Cakupan Wilayah</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-extrabold text-white tracking-tight" data-cms="kpi_cakupan">100%</span>
+<span class="text-slate-400 text-xs font-medium">14 Kecamatan</span>
+</div>
+<p class="text-[12px] text-slate-400 mt-2">
+              <span data-cms="kpi_cakupan_desc">190 Desa &amp; Kelurahan terhubung sistem pelaporan lapangan.</span>
+            </p>
+</div>
+<!-- KPI 4 -->
+<div class="py-4 sm:py-0 sm:px-6 last:pr-0">
+<span class="text-slate-400 text-xs font-mono tracking-wider uppercase block mb-1">SLA Tindak Lanjut</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-extrabold text-emerald-400 tracking-tight" data-cms="kpi_sla">&lt; 48 Jam</span>
+</div>
+<p class="text-[12px] text-slate-400 mt-2">
+              <span data-cms="kpi_sla_desc">Waktu respons kunjungan verifikasi awal sejak aduan masuk.</span>
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Data Analytics & Causes (Rigorous Civic Representation) -->
+<section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<div class="flex flex-col md:flex-row md:items-end justify-between border-b border-slate-300 pb-5 mb-8 gap-4">
+<div>
+<span class="text-xs font-mono uppercase tracking-widest text-slate-500 font-bold block mb-1">STATISTIK AGREGAT &amp; SEBARAN</span>
+<h2 class="text-2xl sm:text-3xl font-extrabold text-civic-900 tracking-tight">
+            Pemetaan Sebaran &amp; Determinasi Faktor Penyebab ATS
+          </h2>
+</div>
+<div class="text-xs text-slate-500 font-mono">
+          SUMBER: SURVEI LAPANGAN POKJA DINAS PENDIDIKAN KAB. WAJO 2026
+        </div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left: Kecamatan Data Strip -->
+<div class="lg:col-span-7 bg-white border border-slate-200 rounded p-6">
+<div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+<div>
+<h3 class="font-bold text-base text-civic-900">Distribusi Kasus Berdasarkan Wilayah Kecamatan</h3>
+<p class="text-xs text-slate-500 mt-0.5">Prioritas pendampingan lapangan UPTD Pendidikan Wilayah</p>
+</div>
+<span class="text-xs font-mono px-2 py-1 bg-slate-100 border border-slate-200 rounded text-slate-700">6 Wilayah Terbanyak</span>
+</div>
+<div class="space-y-4" id="sebaranKecamatanList">
+<div class="text-xs text-slate-400 font-mono">Memuat data sebaran…</div>
+</div>
+<div class="mt-6 pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-2">
+<span id="sebaranSisaLabel">*Kecamatan lainnya terakumulasi sebagian anak terdaftar.</span>
+<a class="text-civic-600 hover:text-civic-900 font-semibold inline-flex items-center gap-1" data-path="direktori-data-ats" href="direktori.html">
+              Lihat Seluruh 14 Kecamatan <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Right: Determinant Factors Breakdown -->
+<div class="lg:col-span-5 bg-white border border-slate-200 rounded p-6">
+<div class="border-b border-slate-200 pb-4 mb-4">
+<h3 class="font-bold text-base text-civic-900">Akar Masalah Putus Sekolah</h3>
+<p class="text-xs text-slate-500 mt-0.5">Klasifikasi penyebab berdasarkan asesmen mendalam pendamping lapangan</p>
+</div>
+<!-- Structured Civic Table/List instead of generic donut -->
+<div class="divide-y divide-slate-100" id="faktorPenyebabList">
+<div class="py-3 text-xs text-slate-400 font-mono">Memuat data…</div>
+</div>
+<div class="mt-4 p-3 bg-slate-50 border border-slate-200 rounded text-xs text-slate-600">
+<strong>Komitmen Intervensi:</strong> Pemkab Wajo memfasilitasi beasiswa perlengkapan sekolah lengkap dan pendaftaran gratis Paket Kesetaraan A/B/C di PKBM mitra.
+          </div>
+</div>
+</div>
+</section>
+<!-- Section: Cek NIK / Status Pencarian Terverifikasi -->
+<section class="bg-civic-950 text-white py-16 border-t border-b border-civic-850" id="cek-nik">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl">
+<div class="flex items-center gap-2 text-xs font-mono text-ochre-400 font-semibold uppercase tracking-wider mb-2">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span class="">LAYANAN MANDIRI MASYARAKAT</span>
+</div>
+<h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-3">
+            Pengecekan Status Pendataan &amp; Rekomendasi Bantuan (NIK)
+          </h2>
+<p class="text-sm text-slate-300 mb-8 leading-relaxed">
+            Periksa apakah anak telah masuk ke dalam basis data intervensi UPTD Dinas Pendidikan Kab. Wajo untuk penetapan bantuan seragam, beasiswa afirmasi, atau penempatan di SMP/PKBM terdekat.
+          </p>
+<!-- Input query box -->
+<div class="bg-white p-2 rounded flex flex-col sm:flex-row items-center gap-2">
+<div class="flex items-center gap-3 px-3 w-full">
+<span class="material-symbols-outlined text-slate-400">search</span>
+<input class="w-full bg-transparent text-civic-900 text-sm font-medium focus:outline-none placeholder:text-slate-400 py-2 border-0" id="nikSearchInput" maxlength="16" placeholder="Masukkan 16 digit Nomor Induk Kependudukan (NIK)..." type="text">
+<span class="hidden md:inline-block bg-slate-100 text-slate-600 text-[10px] font-mono px-2 py-0.5 rounded border border-slate-200">Ctrl+K</span>
+</div>
+<button class="w-full sm:w-auto shrink-0 bg-civic-900 hover:bg-civic-850 text-white text-xs sm:text-sm font-semibold px-6 py-3 rounded transition-colors flex items-center justify-center gap-2" onclick="handleCheckNik()" type="button">
+<span class="">Periksa Data</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<!-- Result box (triggered on check) -->
+<div class="hidden mt-4 p-4 bg-civic-900 border border-civic-700 rounded text-left" id="nikResultBanner"></div>
+<!-- Privacy statement -->
+<div class="flex items-center gap-2 mt-4 text-[12px] text-slate-400">
+<span class="material-symbols-outlined text-[16px] text-slate-400">lock</span>
+<span class="">Data terlindungi dan tunduk pada Undang-Undang No. 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP).</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Crowdsourcing Steps: Alur Pelaporan Warga -->
+<section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<div class="max-w-2xl mb-12">
+<span class="text-xs font-mono uppercase tracking-widest text-ochre-700 font-bold block mb-1">PARTISIPASI PUBLIK</span>
+<h2 class="text-2xl sm:text-3xl font-extrabold text-civic-900 tracking-tight">
+          Cara Melaporkan Temuan Anak Putus Sekolah
+        </h2>
+<p class="text-sm text-slate-600 mt-2">
+          Tiga tahapan sederhana bagi masyarakat, pengurus RT/RW, maupun kepala dusun untuk menyambungkan anak pada pendampingan resmi.
+        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<!-- Step 1 -->
+<div class="border border-slate-200 bg-white p-6 rounded relative">
+<div class="text-xs font-mono text-slate-400 font-bold mb-3 uppercase tracking-wider">TAHAP 01</div>
+<h3 class="text-base font-bold text-civic-900 mb-2">Identifikasi di Lingkungan</h3>
+<p class="text-xs text-slate-600 leading-relaxed">
+            Temukan anak rentang usia 7 hingga 18 tahun di sekitar Anda yang tidak terdaftar di satuan pendidikan formal atau telah berhenti sebelum menamatkan SMA/SMK/sederajat.
+          </p>
+</div>
+<!-- Step 2 -->
+<div class="border border-slate-200 bg-white p-6 rounded relative">
+<div class="text-xs font-mono text-ochre-700 font-bold mb-3 uppercase tracking-wider">TAHAP 02</div>
+<h3 class="text-base font-bold text-civic-900 mb-2">Pengisian Berkas Singkat</h3>
+<p class="text-xs text-slate-600 leading-relaxed">
+            Laporkan via portal ini dengan memasukkan nama anak, perkiraan alamat domisili, kondisi keluarga, serta nomor telepon pihak keluarga/pemberi informasi.
+          </p>
+</div>
+<!-- Step 3 -->
+<div class="border border-slate-200 bg-white p-6 rounded relative">
+<div class="text-xs font-mono text-civic-600 font-bold mb-3 uppercase tracking-wider">TAHAP 03</div>
+<h3 class="text-base font-bold text-civic-900 mb-2">Verifikasi Lapangan &amp; Solusi</h3>
+<p class="text-xs text-slate-600 leading-relaxed">
+            Tim Satgas UPTD Kecamatan mendatangi kediaman anak untuk melakukan asesmen pembiayaan, penyediaan perlengkapan, dan pendaftaran ke sekolah yang dituju.
+          </p>
+</div>
+</div>
+<!-- Narrative Case Story (Grounding Real Story from Tempe) -->
+<div class="border border-slate-200 bg-white rounded p-6 sm:p-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<div class="lg:col-span-4 aspect-[4/3] bg-slate-100 border border-slate-200 overflow-hidden rounded">
+<img data-cms-src="catatan_foto_url" alt="Anak di Wajo kembali bersekolah setelah didampingi Satgas" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBypcAXDS1ofd4kLBSOP71Rmnem9XgFhJVDXPt3X0UDarTaf5Vrmo3GcPX-mtfXPgvODzABm9J_3PaLhu7SsBak8UF-nW2c1IGsGv9LoueWBZv0y2Nm7vcPoVKMXCYjdK3xcPNTeWKxvt0Qj7fQxsTi5-upUIcEH4PLS__bpzeMOmWisMBmPDtZjqq8vXA-YumGLMn6_LskVdtvqJ9wEhNdFKnekCnPgk4yFoQTg-wS40Y3J7pztHQW">
+</div>
+<div class="lg:col-span-8 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 text-xs font-mono text-slate-500 mb-2">
+<span class="font-bold text-ochre-700">CATATAN LAPANGAN POKJA</span>
+<span class="">•</span>
+<span class=""><span data-cms="catatan_lokasi">KECAMATAN TEMPE, KAB. WAJO</span></span>
+</div>
+<blockquote class="font-editorial text-xl sm:text-2xl text-civic-900 italic leading-snug mb-4">
+                <span data-cms="catatan_quote">"Andi R. (14 tahun) sempat 2 tahun berhenti sekolah untuk membantu memetik cabai di kebun demi menopang keluarga. Melalui laporan kepala dusun di portal SIP-ATS Wajo, kini ia telah terdaftar kembali di SMP Terbuka Sengkang dengan bantuan beasiswa perlengkapan penuh."</span>
+              </blockquote>
+<p class="text-xs font-semibold text-slate-700">
+                <span data-cms="catatan_sumber">— Koordinator Satgas ATS UPTD Pendidikan Wilayah Tempe</span>
+              </p>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+<span class="text-xs text-slate-500">
+                *Identitas pelapor dijamin kerahasiaannya dan dapat dipilih sebagai <strong>Laporan Anonim</strong>.
+              </span>
+<a class="inline-flex items-center gap-2 bg-ochre-600 hover:bg-ochre-700 text-white font-semibold text-xs px-5 py-2.5 rounded transition-colors" data-path="laporkan-ats" href="laporkan.html">
+<span class="material-symbols-outlined text-[16px]">campaign</span>
+<span class="">Bantu Laporkan Temuan Sekarang</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Support Hotline & Civic Information Columns -->
+<section class="border-t border-slate-200 bg-slate-100 py-12">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="border border-slate-200 bg-white p-5 rounded">
+<div class="text-xs font-mono text-slate-500 uppercase tracking-wider mb-1">CALL CENTER RESMI</div>
+<div class="text-base font-bold text-civic-900 mb-1"><span data-cms="kontak_call">(0485) 21102 / Layanan ATS</span></div>
+<p class="text-xs text-slate-600">
+              Posko Pengaduan Dinas Pendidikan Kab. Wajo melayani pada jam kerja kantor (08:00 - 16:00 WITA).
+            </p>
+</div>
+<div class="border border-slate-200 bg-white p-5 rounded">
+<div class="text-xs font-mono text-slate-500 uppercase tracking-wider mb-1">PROGRAM AFIRMASI</div>
+<div class="text-base font-bold text-civic-900 mb-1">Jalur PKBM &amp; Sekolah Terbuka</div>
+<p class="text-xs text-slate-600">
+              Penyelenggaraan Ujian Kesetaraan Paket A, B, dan C tanpa pungutan biaya untuk warga belajar terverifikasi.
+            </p>
+</div>
+<div class="border border-slate-200 bg-white p-5 rounded">
+<div class="text-xs font-mono text-slate-500 uppercase tracking-wider mb-1">AKURASI DATA</div>
+<div class="text-base font-bold text-civic-900 mb-1">Validasi Silang Disdukcapil</div>
+<p class="text-xs text-slate-600">
+              Setiap berkas rujukan dipadankan langsung dengan NIK dan Kartu Keluarga guna ketepatan alokasi beasiswa.
+            </p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Civic Footer: Dignified & Exact Municipal Data -->
+<footer class="bg-civic-950 text-slate-400 border-t border-civic-900 pt-14 pb-10">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-civic-850">
+<!-- Institutional Details -->
+<div class="md:col-span-5">
+<div class="flex items-center gap-3 mb-4">
+<img alt="Logo Resmi Wajo Cerdas" class="h-14 w-auto object-contain bg-white/10 p-1.5 rounded" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCd6SVPzcp00NTkqYcvt5LOqr0wt6_KVbMjnYj-GYC328h5Ey_3xYgs_IWW2oLoarZLTgtmVuKqpiTJqRG8CfDlUoimLoR88fXABNqISlnTQlRnqGOgnIU0p5HA96VG7zbTJAaQWRHkx-u0gUNb9rhOSGvZCQKQngBtSJY7meCeUu7uvFNK2_k5Cg1tq4zwEF_4pJ9yKc5zOMVbHXOxNS2i1MN-G6vpnUFZ-q8HOSlN31h6pfhaZqnUvVxPhE8F1fm5Bw">
+<div>
+<span class="text-white font-bold text-sm block">Dinas Pendidikan &amp; Kebudayaan</span>
+<span class="text-xs text-slate-300">Pemerintah Kabupaten Wajo</span>
+</div>
+</div>
+<p class="text-xs leading-relaxed text-slate-400 mb-4">
+            <span data-cms="alamat">Jl Jend Ahmad Yani, Paddupa, Kec. Tempe, Kabupaten Wajo, Sulawesi Selatan 90914.</span><br>
+            Sistem Informasi Penanganan &amp; Pemulihan Anak Tidak Sekolah (SIP-ATS) didedikasikan untuk memastikan setiap anak usia 7–18 tahun di Kabupaten Wajo terlayani dalam pendidikan yang layak.
+          </p>
+<div class="text-[11px] text-slate-400 font-mono">
+            KODE WILAYAH KEMENDAGRI: 73.13 (KABUPATEN WAJO)
+          </div>
+</div>
+<!-- Links Columns -->
+<div class="md:col-span-3">
+<h4 class="text-xs font-bold font-mono text-slate-200 uppercase tracking-wider mb-4">Tautan Lembaga</h4>
+<ul class="space-y-2 text-xs">
+<li class=""><a class="hover:text-white transition-colors" href="#">Portal Pemkab Wajo</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Kemendikbudristek RI</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Dapodikdasmen</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Pusdatin Kemdikbud</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Bappelitbangda Kab. Wajo</a></li>
+</ul>
+</div>
+<div class="md:col-span-4">
+<h4 class="text-xs font-bold font-mono text-slate-200 uppercase tracking-wider mb-4">Layanan Warga</h4>
+<ul class="space-y-2 text-xs">
+<li class=""><a class="hover:text-white transition-colors" data-path="laporkan-ats" href="laporkan.html">Formulir Pelaporan ATS Online</a></li>
+<li class=""><a class="hover:text-white transition-colors" data-path="direktori-data-ats" href="direktori.html">Direktori &amp; Data Agregat Kecamatan</a></li>
+<li class=""><a class="hover:text-white transition-colors" data-path="faq-privasi" href="index.html#kontak">Kebijakan Privasi &amp; Perlindungan Identitas Anak</a></li>
+<li class=""><a class="hover:text-white transition-colors" data-path="bantuan-call-center" href="index.html#kontak">Kontak Satgas UPTD Kecamatan</a></li>
+<li class=""><a class="hover:text-white transition-colors" data-path="dashboard-admin" href="dashboard-admin.html">Portal Verifikator Lapangan (Petugas)</a></li>
+</ul>
+</div>
+</div>
+<!-- Copyright & System Identification -->
+<div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
+<div class="">
+          © 2026 Pemerintah Kabupaten Wajo. Hak Cipta Dilindungi Undang-Undang.
+        </div>
+<div class="font-mono">
+          SIP-ATS WAJO — SISTEM PENANGANAN &amp; PEMULIHAN ATS VERSI 2.0
+        </div>
+</div>
+</div>
+</footer>
+<script src="assets/config.js"></script>
+<script src="assets/api.js"></script>
+<script src="assets/cms.js"></script>
+<script>
+    function fmtID(n) { return Number(n || 0).toLocaleString('id-ID'); }
+
+    async function handleCheckNik() {
+      const input = document.getElementById('nikSearchInput');
+      const resultBanner = document.getElementById('nikResultBanner');
+      const nik = (input.value || '').replace(/\D/g, '');
+      if (nik.length !== 16) {
+        alert('Mohon masukkan 16 digit NIK yang valid untuk verifikasi.');
+        return;
+      }
+      resultBanner.classList.remove('hidden');
+      resultBanner.innerHTML = '<p class="text-xs text-slate-300">Memeriksa data…</p>';
+      try {
+        const res = await SipAtsAPI.checkNik(nik);
+        if (res.found) {
+          const d = res.data;
+          resultBanner.innerHTML = `
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-emerald-400 text-[24px]">verified</span>
+              <div>
+                <p class="text-sm font-bold text-white">Data NIK Terverifikasi: Terdaftar Program Bantuan SIP-ATS</p>
+                <p class="text-xs text-slate-300 mt-1">
+                  Inisial: <strong>${d.namaTersamar} (${d.usia} Tahun)</strong> — Wilayah UPTD Kec. ${d.kecamatan}.<br>
+                  Status Terkini: <em>${d.statusIntervensi}${d.mitraPendidikan ? ' — ' + d.mitraPendidikan : ''}.</em>
+                </p>
+                <a href="direktori.html" class="inline-block mt-2 text-xs font-semibold text-ochre-400 hover:text-ochre-300">Lihat detail lengkap di Direktori Data ATS &rarr;</a>
+              </div>
+            </div>`;
+        } else {
+          resultBanner.innerHTML = `
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-slate-400 text-[24px]">info</span>
+              <div>
+                <p class="text-sm font-bold text-white">NIK belum terdaftar dalam basis data ATS Wajo.</p>
+                <p class="text-xs text-slate-300 mt-1">Jika Anda mengetahui anak dengan NIK ini tidak bersekolah, silakan <a href="laporkan.html" class="text-ochre-400 hover:text-ochre-300 font-semibold">laporkan temuan ini</a> agar dapat ditindaklanjuti Satgas UPTD Kecamatan.</p>
+              </div>
+            </div>`;
+        }
+      } catch (err) {
+        resultBanner.innerHTML = '<p class="text-xs text-red-300">Gagal memeriksa data: ' + err.message + '</p>';
+      }
+    }
+
+    // Shortcut Ctrl+K
+    window.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        const input = document.getElementById('nikSearchInput');
+        if (input) input.focus();
+      }
+    });
+
+    async function loadStats() {
+      try {
+        const s = await SipAtsAPI.getStats();
+        const cfg = await (window.SipAtsCMS ? window.SipAtsCMS.ready : Promise.resolve({}));
+        document.getElementById('statTotalTerdata').textContent = fmtID(s.totalTerdata);
+        document.getElementById('statKembali').textContent = fmtID(s.kembaliBersekolah);
+        document.getElementById('statKembaliPersen').textContent = `Anak (${String(s.persenKembali).replace('.', ',')}%)`;
+        if (cfg.kpi_mode === 'manual') {
+          if (cfg.kpi_total) document.getElementById('statTotalTerdata').textContent = cfg.kpi_total;
+          if (cfg.kpi_kembali) document.getElementById('statKembali').textContent = cfg.kpi_kembali;
+          if (cfg.kpi_kembali_persen) document.getElementById('statKembaliPersen').textContent = cfg.kpi_kembali_persen;
+        }
+
+        const sebaranEl = document.getElementById('sebaranKecamatanList');
+        const top6 = s.sebaranKecamatan.slice(0, 6);
+        const maxVal = top6.length ? top6[0].jumlah : 1;
+        const barColors = ['bg-civic-900', 'bg-civic-700', 'bg-civic-600', 'bg-slate-700', 'bg-slate-500', 'bg-slate-400'];
+        sebaranEl.innerHTML = top6.map((row, i) => {
+          const pct = s.totalTerdata ? Math.round((row.jumlah / s.totalTerdata) * 1000) / 10 : 0;
+          const width = Math.max(6, Math.round((row.jumlah / maxVal) * 100));
+          return `<div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span class="text-civic-900">${i + 1}. Kecamatan ${row.kecamatan}</span>
+              <span class="text-slate-700 font-mono">${fmtID(row.jumlah)} Anak (${String(pct).replace('.', ',')}%)</span>
+            </div>
+            <div class="w-full bg-slate-100 h-3 rounded overflow-hidden">
+              <div class="${barColors[i] || 'bg-slate-300'} h-full" style="width: ${width}%;"></div>
+            </div>
+          </div>`;
+        }).join('') || '<div class="text-xs text-slate-400">Belum ada data sebaran.</div>';
+
+        const restCount = s.sebaranKecamatan.slice(6).reduce((a, b) => a + b.jumlah, 0);
+        document.getElementById('sebaranSisaLabel').textContent =
+          `*${Math.max(0, s.cakupanKecamatan - top6.length)} kecamatan lainnya terakumulasi sebanyak ${fmtID(restCount)} anak terdaftar.`;
+
+        const faktorEl = document.getElementById('faktorPenyebabList');
+        faktorEl.innerHTML = (s.faktorPenyebab || []).map(f => `
+          <div class="py-3 flex items-start justify-between gap-4">
+            <div>
+              <span class="text-xs font-bold text-civic-900 block">${f.faktor}</span>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="text-sm font-bold font-mono text-civic-900 block">${String(f.persen).replace('.', ',')}%</span>
+              <span class="text-[11px] text-slate-500 font-mono">${fmtID(f.jumlah)} Anak</span>
+            </div>
+          </div>`).join('') || '<div class="py-3 text-xs text-slate-400">Belum ada data.</div>';
+      } catch (err) {
+        console.error('Gagal memuat statistik:', err);
+      }
+    }
+
+    loadStats();
+
+    if (SipAtsAPI.isDemoMode()) {
+      document.body.insertAdjacentHTML('afterbegin',
+        '<div class="bg-ochre-500 text-civic-950 text-xs font-semibold text-center py-1.5 px-4">MODE DEMO — assets/config.js belum diisi API_URL, seluruh data yang tampil adalah data contoh.</div>');
+    }
+  </script>
+
+
+</body></html>
