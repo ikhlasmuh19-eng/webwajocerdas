@@ -357,6 +357,11 @@ async function runSetup(){const r=await act(()=>api('setup'),'Struktur sheet dip
 // ---------- INIT ----------
 $('btnLogin').onclick=doLogin;$('btnLogout').onclick=()=>logout(false);
 $('lPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+$('nav').addEventListener('click',e=>{
+  const link=e.target.closest('a.nav-i');
+  if(!link||!S.user||!NAV.some(n=>n.id===link.dataset.v&&n.roles.includes(S.user.role))||typeof V[link.dataset.v]!=='function')return;
+  e.preventDefault();go(link.dataset.v);
+});
 $('btnMenu').onclick=()=>{$('sidebar').classList.remove('-translate-x-full');$('scrim').classList.remove('hidden');};
 $('scrim').onclick=()=>{$('sidebar').classList.add('-translate-x-full');$('scrim').classList.add('hidden');};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
