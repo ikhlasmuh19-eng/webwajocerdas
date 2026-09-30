@@ -80,12 +80,14 @@ const NAV=[
 ];
 const CMS=[
  {t:'Pengumuman (pita di atas semua halaman publik)',f:[['banner_aktif','Tampilkan pengumuman','toggle',''],['banner_teks','Teks pengumuman','text','']]},
- {t:'Hero Beranda',f:[
+ {t:'Hero Beranda',note:'Slideshow foto otomatis berganti setiap 5 detik (dapat juga diganti dengan tombol). Isi URL HTTPS satu foto per kolom; sediakan tautan gambar yang bisa diakses publik. Foto pertama yang terisi tampil lebih dahulu. Maksimal 5 foto; keterangan berlaku untuk semua slide.',f:[
   ['hero_eyebrow_1','Label kecil 1','text','AGENDA DAERAH'],['hero_eyebrow_2','Label kecil 2','text','WAJIB BELAJAR 13 TAHUN KABUPATEN WAJO'],
   ['hero_title','Judul utama','area','Gerakan Bersama Menuntaskan Anak Tidak Sekolah di Bumi Lamaddukelleng.'],
   ['hero_quote','Kutipan','area','"Setiap anak di Kabupaten Wajo memiliki hak konstitusional untuk bersekolah secara merdeka, tuntas, dan bermartabat tanpa terhalang kemiskinan maupun geografis."'],
   ['hero_desc','Deskripsi','area','Pemerintah Kabupaten Wajo melalui Dinas Pendidikan dan Kebudayaan menyinergikan seluruh Satgas Kecamatan, UPTD Sekolah, serta Pemerintah Desa untuk mendeteksi, mendampingi, dan mengembalikan anak usia 7–18 tahun ke bangku sekolah formal maupun pendidikan kesetaraan PKBM.'],
-  ['hero_photo_url','URL foto hero (https://…)','url',''],['hero_photo_caption','Keterangan foto','text','Ruang kelas UPTD SD Negeri di Wajo menerima kembali murid binaan afirmasi SIP-ATS.'],
+  ['hero_photo_url','URL foto slide 1 (https://…)','url',''],['hero_photo_url_2','URL foto slide 2 (https://…)','url',''],
+  ['hero_photo_url_3','URL foto slide 3 (https://…)','url',''],['hero_photo_url_4','URL foto slide 4 (https://…)','url',''],
+  ['hero_photo_url_5','URL foto slide 5 (https://…)','url',''],['hero_photo_caption','Keterangan foto','text','Ruang kelas UPTD SD Negeri di Wajo menerima kembali murid binaan afirmasi SIP-ATS.'],
   ['fokus_text','Teks "Fokus Penanganan Terpadu"','area','Intervensi terbagi atas: (1) Penyaluran beasiswa perlengkapan, (2) Advokasi orang tua & komite, (3) Pendaftaran Paket A/B/C gratis di Sanggar Kegiatan Belajar (SKB).']]},
  {t:'Indikator Utama (KPI)',note:'Mode "otomatis" menghitung dari Master Data. Mode "manual" memakai angka di bawah.',f:[
   ['kpi_mode','Mode angka KPI','select:otomatis|manual','otomatis'],['kpi_total','Total ATS terdata (manual)','text','1.428'],['kpi_kembali','Anak kembali bersekolah (manual)','text','482'],
@@ -323,7 +325,7 @@ V.beranda=async function(){
 };
 async function saveCms(){
   const values={};CMS.forEach(s=>s.f.forEach(([k,,t])=>{const e=$('c_'+k);if(!e)return;values[k]=t==='toggle'?(e.checked?'true':''):e.value.trim();}));
-  for(const k of ['hero_photo_url','catatan_foto_url']){if(values[k]&&!/^https:\/\//i.test(values[k])){toast('URL foto harus diawali https://',true);return;}}
+  for(const k of ['hero_photo_url','hero_photo_url_2','hero_photo_url_3','hero_photo_url_4','hero_photo_url_5','catatan_foto_url']){if(values[k]&&!/^https:\/\//i.test(values[k])){toast('URL foto harus diawali https://',true);return;}}
   const r=await act(()=>api('configSave',{values}),'Beranda diperbarui.');
 }
 
