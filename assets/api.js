@@ -54,6 +54,7 @@
     checkNik: (nik) => apiGet('checkNik', { nik }),
     getWilayah: () => apiGet('wilayah'),
     getConfig: () => apiGet('config'),
+    getPrograms: () => apiGet('programs'),
     submitLaporan: (payload) => apiPost('laporkan', payload),
     getQueue: (params) => apiGet('queue', Object.assign({ key: getAdminKey() }, params)),
     updateStatus: (payload) => apiPost('updateStatus', Object.assign({ key: getAdminKey() }, payload)),
@@ -90,6 +91,12 @@
         };
       case 'config':
         return {};
+      case 'programs':
+        return {
+          data: [
+            { Nama_Program: 'Contoh Program Beasiswa', Jenis: 'Beasiswa Perlengkapan', Mitra_Pelaksana: 'Contoh Mitra', Status: 'Aktif', Periode: '', Keterangan: 'Data contoh mode demo, bukan informasi program aktual.' }
+          ]
+        };
       case 'wilayah':
         return { kecamatan: ['Tempe', 'Pitumpanua', 'Belawa', 'Maniangpajo', 'Pammana', 'Sabbangparu', 'Tanasitolo', 'Majauleng', 'Takkalalla', 'Sajoanging', 'Penrang', 'Bola', 'Keera', 'Gilireng'] };
       case 'directory': {

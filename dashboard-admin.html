@@ -2,7 +2,7 @@
 <html lang="id"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>Konsol Admin | SIP-ATS Kabupaten Wajo</title>
+<title>Konsol Admin | WAJO CERDAS Kabupaten Wajo</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -16,15 +16,17 @@
 <div id="loginScreen" class="min-h-screen flex items-center justify-center bg-civic-950 px-4">
  <div class="w-full max-w-sm bg-white rounded-lg p-8 shadow-xl">
   <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded bg-civic-600 text-white flex items-center justify-center font-extrabold">W</div>
-   <div><div class="text-sm font-extrabold">SIP-ATS WAJO</div><div class="text-[11px] text-slate-500">Konsol Admin &amp; Verifikasi</div></div></div>
+   <div><div class="text-sm font-extrabold">WAJO CERDAS</div><div class="text-[11px] text-slate-500">Konsol Admin &amp; Verifikasi</div></div></div>
   <h1 class="text-lg font-bold mb-1">Masuk</h1>
   <p class="text-xs text-slate-500 mb-5">Khusus petugas Dinas Pendidikan &amp; Kebudayaan dan UPTD Korwil Kecamatan.</p>
-  <label class="text-xs font-semibold block mb-1" for="lUser">Username</label>
-  <input id="lUser" class="w-full border border-slate-300 rounded px-3 py-2.5 text-sm mb-3" autocomplete="username">
-  <label class="text-xs font-semibold block mb-1" for="lPass">Kata Sandi</label>
-  <input id="lPass" type="password" class="w-full border border-slate-300 rounded px-3 py-2.5 text-sm mb-3" autocomplete="current-password">
-  <div id="loginErr" class="hidden text-xs text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2 mb-3"></div>
-  <button id="btnLogin" class="w-full bg-civic-600 hover:bg-blue-800 text-white font-semibold text-sm py-2.5 rounded disabled:opacity-50">Masuk Konsol</button>
+  <form id="loginForm" novalidate>
+   <label class="text-xs font-semibold block mb-1" for="lUser">Username</label>
+   <input id="lUser" type="text" class="w-full border border-slate-300 rounded px-3 py-2.5 text-sm mb-3" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="40" required>
+   <label class="text-xs font-semibold block mb-1" for="lPass">Kata Sandi</label>
+   <input id="lPass" type="password" class="w-full border border-slate-300 rounded px-3 py-2.5 text-sm mb-3" autocomplete="current-password" required>
+   <div id="loginErr" role="alert" aria-live="polite" class="hidden text-xs text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2 mb-3"></div>
+   <button id="btnLogin" type="submit" class="w-full bg-civic-600 hover:bg-blue-800 text-white font-semibold text-sm py-2.5 rounded disabled:opacity-50">Masuk Konsol</button>
+  </form>
   <p class="text-[11px] text-slate-400 mt-4">Akun pertama: username <b>admin</b> dengan kata sandi = nilai <span class="font-mono">ADMIN_KEY</span> di Script Properties.</p>
  </div>
 </div>
@@ -35,7 +37,7 @@
  <aside id="sidebar" class="fixed lg:static z-40 inset-y-0 left-0 w-64 -translate-x-full lg:translate-x-0 transition-transform bg-civic-950 text-white flex flex-col justify-between shrink-0">
   <div>
    <div class="p-5 border-b border-civic-850 flex items-center gap-3"><div class="w-9 h-9 rounded bg-civic-600 flex items-center justify-center font-extrabold text-sm">W</div>
-    <div><div class="text-sm font-extrabold">SIP-ATS WAJO</div><div class="text-[10px] text-slate-400 tracking-wide">PUSAT KOMANDO &amp; VERIFIKASI</div></div></div>
+    <div><div class="text-sm font-extrabold">WAJO CERDAS</div><div class="text-[10px] text-slate-400 tracking-wide">PUSAT KOMANDO &amp; VERIFIKASI</div></div></div>
    <nav id="nav" class="p-3 space-y-1"></nav>
   </div>
   <div class="p-4 border-t border-civic-850">
@@ -47,7 +49,7 @@
   <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex items-center justify-between gap-3 sticky top-0 z-20">
    <div class="flex items-center gap-3"><button id="btnMenu" class="lg:hidden p-1"><span class="material-symbols-outlined">menu</span></button>
     <h1 class="text-base sm:text-lg font-bold" id="viewTitle"></h1></div>
-   <div class="flex items-center gap-2"><span id="syncBadge" class="text-[11px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-1 rounded hidden sm:inline">Terhubung ke Google Sheet</span>
+   <div class="flex items-center gap-2"><span id="syncBadge" class="inline-block h-3 w-3 rounded-full bg-red-500" role="img" aria-label="Database tidak terhubung" title="Database tidak terhubung"></span>
     <a href="index.html" target="_blank" class="text-xs font-semibold border border-slate-200 rounded px-3 py-1.5 hover:bg-slate-50">Lihat Situs</a></div>
   </header>
   <main id="main" class="p-4 sm:p-6"></main>
@@ -66,13 +68,14 @@
 <script>
 'use strict';
 const KEC=['Tempe','Pitumpanua','Belawa','Maniangpajo','Pammana','Sabbangparu','Tanasitolo','Majauleng','Takkalalla','Sajoanging','Penrang','Bola','Keera','Gilireng'];
-const STAT_LAP={PENDING:['Pending Survei','bg-amber-50 text-amber-700'],DITUGASKAN_UPTD:['Ditugaskan UPTD','bg-blue-50 text-blue-700'],VERIFIKASI_VALID:['Verifikasi Valid','bg-emerald-50 text-emerald-700'],REJECTED:['Ditolak','bg-red-50 text-red-700']};
-const STAT_INT=['Verifikasi Valid','Binaan UPTD','Diusulkan Beasiswa','Kembali Bersekolah (Formal)','Kembali Bersekolah (Paket A)','Kembali Bersekolah (Paket B)','Kembali Bersekolah (Paket C)'];
+const STAT_LAP={PENDING:['Pending Survei','bg-amber-50 text-amber-700'],DITUGASKAN_UPTD:['Konfirmasi Data','bg-blue-50 text-blue-700'],VERIFIKASI_VALID:['Verifikasi Valid','bg-emerald-50 text-emerald-700'],REJECTED:['Ditolak','bg-red-50 text-red-700']};
+const STAT_INT=['Diusulkan Beasiswa','Sekolah Formal','Non Formal','Kembali Bersekolah (Paket A)','Kembali Bersekolah (Paket B)','Kembali Bersekolah (Paket C)'];
+const PROGRAM_TYPES=['Kesetaraan (Paket A/B/C)','Beasiswa','Bantuan Perlengkapan Sekolah','Sekolah Terbuka','Transportasi/Antar-Jemput','Lainnya'];
 const NAV=[
  {id:'ringkasan',label:'Ringkasan Dasbor',icon:'grid_view',roles:['superadmin','verifikator','editor']},
  {id:'verifikasi',label:'Verifikasi Lapangan',icon:'fact_check',roles:['superadmin','verifikator']},
  {id:'master',label:'Master Data ATS',icon:'database',roles:['superadmin','verifikator']},
- {id:'program',label:'Program Intervensi & Beasiswa',icon:'volunteer_activism',roles:['superadmin','editor']},
+ {id:'program',label:'Program',icon:'volunteer_activism',roles:['superadmin','editor']},
  {id:'laporan',label:'Laporan & Statistik',icon:'bar_chart',roles:['superadmin','verifikator']},
  {id:'beranda',label:'Kelola Beranda',icon:'web',roles:['superadmin','editor']},
  {id:'pengguna',label:'Pengguna Petugas',icon:'group',roles:['superadmin']},
@@ -80,14 +83,14 @@ const NAV=[
 ];
 const CMS=[
  {t:'Pengumuman (pita di atas semua halaman publik)',f:[['banner_aktif','Tampilkan pengumuman','toggle',''],['banner_teks','Teks pengumuman','text','']]},
- {t:'Hero Beranda',note:'Slideshow foto otomatis berganti setiap 5 detik (dapat juga diganti dengan tombol). Isi URL HTTPS satu foto per kolom; sediakan tautan gambar yang bisa diakses publik. Foto pertama yang terisi tampil lebih dahulu. Maksimal 5 foto; keterangan berlaku untuk semua slide.',f:[
+ {t:'Hero Beranda',note:'Slideshow foto otomatis berganti setiap 5 detik (dapat juga diganti dengan tombol). Unggah foto langsung atau isi URL HTTPS yang bisa diakses publik. Foto pertama yang terisi tampil lebih dahulu. Maksimal 5 foto; keterangan berlaku untuk semua slide.',f:[
   ['hero_eyebrow_1','Label kecil 1','text','AGENDA DAERAH'],['hero_eyebrow_2','Label kecil 2','text','WAJIB BELAJAR 13 TAHUN KABUPATEN WAJO'],
   ['hero_title','Judul utama','area','Gerakan Bersama Menuntaskan Anak Tidak Sekolah di Bumi Lamaddukelleng.'],
   ['hero_quote','Kutipan','area','"Setiap anak di Kabupaten Wajo memiliki hak konstitusional untuk bersekolah secara merdeka, tuntas, dan bermartabat tanpa terhalang kemiskinan maupun geografis."'],
-  ['hero_desc','Deskripsi','area','Pemerintah Kabupaten Wajo melalui Dinas Pendidikan dan Kebudayaan menyinergikan seluruh Satgas Kecamatan, UPTD Sekolah, serta Pemerintah Desa untuk mendeteksi, mendampingi, dan mengembalikan anak usia 7–18 tahun ke bangku sekolah formal maupun pendidikan kesetaraan PKBM.'],
-  ['hero_photo_url','URL foto slide 1 (https://…)','url',''],['hero_photo_url_2','URL foto slide 2 (https://…)','url',''],
-  ['hero_photo_url_3','URL foto slide 3 (https://…)','url',''],['hero_photo_url_4','URL foto slide 4 (https://…)','url',''],
-  ['hero_photo_url_5','URL foto slide 5 (https://…)','url',''],['hero_photo_caption','Keterangan foto','text','Ruang kelas UPTD SD Negeri di Wajo menerima kembali murid binaan afirmasi SIP-ATS.'],
+  ['hero_desc','Deskripsi','area','Pemerintah Kabupaten Wajo melalui Dinas Pendidikan dan Kebudayaan menyinergikan seluruh Satgas Kecamatan, UPTD Sekolah, serta Pemerintah Desa untuk mendeteksi, mendampingi, dan mengembalikan anak usia 7â€“18 tahun ke bangku sekolah formal maupun pendidikan kesetaraan PKBM.'],
+  ['hero_photo_url','URL foto slide 1 (https://â€¦)','url',''],['hero_photo_url_2','URL foto slide 2 (https://â€¦)','url',''],
+  ['hero_photo_url_3','URL foto slide 3 (https://â€¦)','url',''],['hero_photo_url_4','URL foto slide 4 (https://â€¦)','url',''],
+  ['hero_photo_url_5','URL foto slide 5 (https://â€¦)','url',''],['hero_photo_caption','Keterangan foto','text','Ruang kelas UPTD SD Negeri di Wajo menerima kembali murid binaan afirmasi WAJO CERDAS.'],
   ['fokus_text','Teks "Fokus Penanganan Terpadu"','area','Intervensi terbagi atas: (1) Penyaluran beasiswa perlengkapan, (2) Advokasi orang tua & komite, (3) Pendaftaran Paket A/B/C gratis di Sanggar Kegiatan Belajar (SKB).']]},
  {t:'Indikator Utama (KPI)',note:'Mode "otomatis" menghitung dari Master Data. Mode "manual" memakai angka di bawah.',f:[
   ['kpi_mode','Mode angka KPI','select:otomatis|manual','otomatis'],['kpi_total','Total ATS terdata (manual)','text','1.428'],['kpi_kembali','Anak kembali bersekolah (manual)','text','482'],
@@ -95,10 +98,10 @@ const CMS=[
   ['kpi_cakupan_desc','Keterangan cakupan','text','190 Desa & Kelurahan terhubung sistem pelaporan lapangan.'],['kpi_sla','Standar layanan (SLA)','text','< 48 Jam'],
   ['kpi_sla_desc','Keterangan SLA','text','Waktu respons kunjungan verifikasi awal sejak aduan masuk.']]},
  {t:'Catatan Lapangan Pokja',f:[['catatan_lokasi','Lokasi','text','KECAMATAN TEMPE, KAB. WAJO'],
-  ['catatan_quote','Kutipan cerita','area','"Andi R. (14 tahun) sempat 2 tahun berhenti sekolah untuk membantu memetik cabai di kebun demi menopang keluarga. Melalui laporan kepala dusun di portal SIP-ATS Wajo, kini ia telah terdaftar kembali di SMP Terbuka Sengkang dengan bantuan beasiswa perlengkapan penuh."'],
-  ['catatan_sumber','Sumber / penutur','text','— Koordinator Satgas ATS UPTD Pendidikan Wilayah Tempe'],['catatan_foto_url','URL foto (https://…)','url','']]},
+  ['catatan_quote','Kutipan cerita','area','"Andi R. (14 tahun) sempat 2 tahun berhenti sekolah untuk membantu memetik cabai di kebun demi menopang keluarga. Melalui laporan kepala dusun di portal WAJO CERDAS, kini ia telah terdaftar kembali di SMP Terbuka Sengkang dengan bantuan beasiswa perlengkapan penuh."'],
+  ['catatan_sumber','Sumber / penutur','text','â€” Koordinator Satgas ATS UPTD Pendidikan Wilayah Tempe'],['catatan_foto_url','URL foto (https://â€¦)','url','']]},
  {t:'Kontak & Alamat (tampil di kartu kontak, formulir laporan, dan footer)',f:[['kontak_call','Teks Call Center (Beranda)','text','(0485) 21102 / Layanan ATS'],['kontak_telp','Telepon kantor (formulir)','text','(0485) 21102'],
-  ['kontak_wa','WhatsApp Satgas (formulir)','text','0811-4200-989'],['alamat','Alamat footer','area','Jl Jend Ahmad Yani, Paddupa, Kec. Tempe, Kabupaten Wajo, Sulawesi Selatan 90914.']]}
+  ['kontak_wa','WhatsApp Satgas (formulir)','text','0851-3991-1440'],['alamat','Alamat footer','area','Jl Jend Ahmad Yani, Paddupa, Kec. Tempe, Kabupaten Wajo, Sulawesi Selatan 90914.']]}
 ];
 
 const S={api:'',token:'',user:null,view:'ringkasan',q:{status:'SEMUA',search:'',kecamatan:'',page:1},m:{search:'',kecamatan:'',status:'',page:1},cache:{}};
@@ -118,13 +121,21 @@ function toast(msg,err){const t=document.createElement('div');t.className='px-4 
 function openModal(title,body,foot){$('mTitle').textContent=title;$('mBody').innerHTML=body;$('mFoot').innerHTML=foot||'';$('modal').classList.remove('hidden');}
 function closeModal(){$('modal').classList.add('hidden');}
 
-async function api(action,body){
-  let res;
-  try{res=await fetch(S.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:S.token},body||{}))});}
-  catch(e){throw new Error('Tidak dapat terhubung ke server. Periksa URL Web App dan koneksi internet.');}
+async function api(action,body,timeoutMs){
+  const waitSeconds=Math.ceil((timeoutMs||30000)/1000);
+  let res;const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),timeoutMs||30000);
+  try{res=await fetch(S.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:S.token},body||{})),signal:controller.signal});}
+  catch(e){if(controller.signal.aborted)throw new Error('Server tidak merespons dalam '+waitSeconds+' detik. Periksa koneksi lalu coba lagi.');throw new Error('Tidak dapat terhubung ke server. Periksa koneksi internet.');}
+  finally{clearTimeout(timeout);}
   let j;try{j=await res.json();}catch(e){throw new Error('Respons server tidak valid. Pastikan URL Web App benar dan akses diset "Anyone".');}
   if(j.code==='SESI_HABIS'){logout(true);throw new Error('Sesi berakhir, silakan masuk kembali.');}
-  if(j.error)throw new Error(j.error);
+  if(j.error){
+    if(action==='uploadImage'&&/^Aksi tidak dikenal:\s*uploadImage/i.test(j.error))
+      throw new Error('Fitur unggah foto belum aktif di backend. Perbarui Code.gs ke versi terbaru lalu terbitkan versi baru Apps Script.');
+    if(action==='uploadImage'&&j.error==='Peran Anda tidak berhak melakukan aksi ini.')
+      throw new Error('Akun ini belum diberi izin unggah foto oleh backend terbaru. Perbarui Code.gs dan terbitkan versi baru Apps Script.');
+    throw new Error(j.error);
+  }
   return j;
 }
 async function act(fn,okMsg){try{const r=await fn();if(okMsg)toast(okMsg);return r;}catch(e){toast(e.message,true);return null;}}
@@ -139,12 +150,16 @@ function enterApp(){
   go(NAV.some(n=>n.id===h&&n.roles.includes(S.user.role))?h:first);
 }
 async function doLogin(){
+  const username=$('lUser').value.trim(),password=$('lPass').value;
+  if(!/^[a-z0-9._-]{3,40}$/i.test(username)){showLogin('Username harus 3â€“40 karakter dan hanya boleh berisi huruf, angka, titik, garis bawah, atau tanda hubung.');return;}
+  if(!password){showLogin('Masukkan kata sandi.');return;}
   if(!S.api){showLogin('Konfigurasi koneksi server tidak tersedia. Hubungi pengelola situs.');return;}
-  $('btnLogin').disabled=true;$('loginErr').classList.add('hidden');
-  try{const r=await api('login',{username:val('lUser'),password:$('lPass').value});
-    if(!r.success)throw new Error(r.error);
+  const button=$('btnLogin');
+  button.disabled=true;button.textContent='Memeriksaâ€¦';$('loginErr').classList.add('hidden');
+  try{const r=await api('login',{username,password});
+    if(!r||r.success!==true)throw new Error(r&&r.error||'Login gagal. Periksa username dan kata sandi.');
     S.token=r.token;S.user=r.user;sessionStorage.setItem('sipats_tok',r.token);sessionStorage.setItem('sipats_user',JSON.stringify(r.user));enterApp();
-  }catch(e){showLogin(e.message);}finally{$('btnLogin').disabled=false;$('lPass').value='';}
+  }catch(e){showLogin(e.message||'Login gagal. Silakan coba lagi.');}finally{button.disabled=false;button.textContent='Masuk Konsol';$('lPass').value='';}
 }
 function logout(silent){
   if(S.token&&!silent)fetch(S.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'logout',token:S.token})}).catch(()=>{});
@@ -157,7 +172,7 @@ function go(v){
   S.view=v;const n=NAV.find(x=>x.id===v);$('viewTitle').textContent=n?n.label:'';history.replaceState(null,'','#'+v);
   document.querySelectorAll('.nav-i').forEach(a=>{const on=a.dataset.v===v;a.className='nav-i flex items-center gap-3 px-3 py-2.5 rounded text-sm '+(on?'bg-civic-600 text-white font-semibold':'text-slate-300 hover:bg-civic-850');});
   $('sidebar').classList.add('-translate-x-full');$('scrim').classList.add('hidden');
-  $('main').innerHTML='<div class="text-xs text-slate-400 p-6 text-center">Memuat…</div>';
+  $('main').innerHTML='<div class="text-xs text-slate-400 p-6 text-center">Memuatâ€¦</div>';
   V[v]();
 }
 
@@ -171,7 +186,7 @@ V.ringkasan=async function(){
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
    ${card('Laporan Masuk',d.counts.SEMUA,'text-civic-600','inbox','Total seluruh tiket')}
    ${card('Pending Survei',d.counts.PENDING,'text-amber-500','hourglass_top','Belum ditugaskan')}
-   ${card('Ditindaklanjuti UPTD',d.counts.DITUGASKAN_UPTD,'text-blue-500','directions_walk','Sedang disurvei')}
+   ${card('Konfirmasi Data',d.counts.DITUGASKAN_UPTD,'text-blue-500','fact_check','Sedang dikonfirmasi')}
    ${card('Terdata (Master)',d.masterTotal,'text-emerald-600','verified',fmtN(d.kembali)+' kembali bersekolah')}
   </div>
   <div class="grid lg:grid-cols-3 gap-5 mb-5">
@@ -181,10 +196,10 @@ V.ringkasan=async function(){
    <div class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-3">Kualitas data</h3><div class="text-3xl font-extrabold">${d.nikValidPct}%</div><p class="text-[11px] text-slate-500 mt-1">Laporan dengan NIK 16 digit valid secara format. Pencocokan resmi ke SIAK Dukcapil dilakukan manual oleh verifikator.</p></div>
   </div>
   <div class="grid lg:grid-cols-2 gap-5 mb-5">
-   <div class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-4">Sebaran per kecamatan</h3><div class="space-y-3">${d.perKecamatan.slice(0,8).map(x=>`<div><div class="flex justify-between text-xs mb-1"><span class="font-semibold">${esc(x.kecamatan)}</span><span class="font-mono text-slate-600">${x.laporan} laporan · ${x.terverifikasi} terdata</span></div><div class="h-2.5 bg-slate-100 rounded overflow-hidden"><div class="h-full bg-civic-600" style="width:${(x.laporan+x.terverifikasi)/maxK*100}%"></div></div></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>'}</div></div>
+   <div class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-4">Sebaran per kecamatan</h3><div class="space-y-3">${d.perKecamatan.slice(0,8).map(x=>`<div><div class="flex justify-between text-xs mb-1"><span class="font-semibold">${esc(x.kecamatan)}</span><span class="font-mono text-slate-600">${x.laporan} laporan Â· ${x.terverifikasi} terdata</span></div><div class="h-2.5 bg-slate-100 rounded overflow-hidden"><div class="h-full bg-civic-600" style="width:${(x.laporan+x.terverifikasi)/maxK*100}%"></div></div></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>'}</div></div>
    <div class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-4">Faktor penyebab (dari laporan)</h3><div class="space-y-3">${d.faktor.slice(0,8).map(x=>`<div><div class="flex justify-between text-xs mb-1"><span class="font-semibold">${esc(x.faktor)}</span><span class="font-mono">${x.jumlah}</span></div><div class="h-2.5 bg-slate-100 rounded overflow-hidden"><div class="h-full bg-ochre-500" style="width:${x.jumlah/maxF*100}%"></div></div></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>'}</div></div>
   </div>
-  <div class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-3">Aktivitas petugas terbaru</h3>${d.audit.map(a=>`<div class="flex gap-3 text-xs py-1.5 border-b border-slate-50"><span class="font-mono text-slate-400 shrink-0">${fmtDT(a.Timestamp)}</span><span><b>${esc(a.Petugas)}</b> · ${esc(a.Aksi)} ${esc(a.Detail)}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada aktivitas.</p>'}</div>`;
+  <div class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-3">Aktivitas petugas terbaru</h3>${d.audit.map(a=>`<div class="flex gap-3 text-xs py-1.5 border-b border-slate-50"><span class="font-mono text-slate-400 shrink-0">${fmtDT(a.Timestamp)}</span><span><b>${esc(a.Petugas)}</b> Â· ${esc(a.Aksi)} ${esc(a.Detail)}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada aktivitas.</p>'}</div>`;
 };
 
 // ---------- VERIFIKASI ----------
@@ -192,12 +207,12 @@ let qTimer;
 V.verifikasi=async function(){
   const r=await act(()=>api('queue',{status:S.q.status,search:S.q.search,kecamatan:S.q.kecamatan,page:S.q.page,pageSize:10}));if(!r)return;
   S.cache.queue=r.data;const c=r.counts;
-  const tabs=[['SEMUA','Semua Antrean'],['PENDING','Pending Survei'],['DITUGASKAN_UPTD','Ditindaklanjuti UPTD'],['VERIFIKASI_VALID','Selesai / Valid'],['REJECTED','Ditolak']];
+  const tabs=[['SEMUA','Semua Antrean'],['PENDING','Pending Survei'],['DITUGASKAN_UPTD','Konfirmasi Data'],['VERIFIKASI_VALID','Selesai / Valid'],['REJECTED','Ditolak']];
   $('main').innerHTML=`
   ${c.PENDING?`<div class="bg-ochre-50 border-l-4 border-ochre-500 rounded p-3 mb-4 text-sm"><b class="text-ochre-700">SLA 48 jam:</b> ${fmtN(c.PENDING)} laporan belum ditugaskan. Prioritaskan yang menunggu lebih dari 36 jam.</div>`:''}
   <div class="bg-white border border-slate-200 rounded-lg p-4 mb-4 flex flex-wrap gap-2 items-center">
    ${tabs.map(t=>`<button onclick="S.q.status='${t[0]}';S.q.page=1;V.verifikasi()" class="${btn}${S.q.status===t[0]?'bg-civic-600 text-white':'bg-slate-100 text-slate-600'}">${t[1]} <span class="opacity-70">${fmtN(c[t[0]])}</span></button>`).join('')}
-   <input id="qs" class="${inp} !w-48" placeholder="Cari NIK, nama, tiket…" value="${esc(S.q.search)}" oninput="clearTimeout(qTimer);qTimer=setTimeout(()=>{S.q.search=this.value.trim();S.q.page=1;V.verifikasi();},450)">
+   <input id="qs" class="${inp} !w-48" placeholder="Cari NIK, nama, tiketâ€¦" value="${esc(S.q.search)}" oninput="clearTimeout(qTimer);qTimer=setTimeout(()=>{S.q.search=this.value.trim();S.q.page=1;V.verifikasi();},450)">
    <select class="${inp} !w-40" onchange="S.q.kecamatan=this.value;S.q.page=1;V.verifikasi()">${opt(KEC,S.q.kecamatan,'Semua Kecamatan')}</select>
    <button class="${btnO}" onclick="exportData('laporan')"><span class="material-symbols-outlined !text-base align-middle">grid_on</span> Ekspor Excel</button>
    <button class="${btnO}" onclick="V.verifikasi()"><span class="material-symbols-outlined !text-base align-middle">sync</span> Segarkan</button>
@@ -206,31 +221,34 @@ V.verifikasi=async function(){
    const sla=j==null?'':(j>48?`<span class="text-[11px] font-semibold text-red-600">Lewat SLA (${j} jam)</span>`:j>36?`<span class="text-[11px] font-semibold text-amber-600">Sisa ${48-j} jam</span>`:`<span class="text-[11px] text-slate-500">${j} jam menunggu</span>`);
    return `<div class="bg-white border border-slate-200 rounded-lg p-4 grid sm:grid-cols-12 gap-3 items-center">
     <div class="sm:col-span-3"><div class="text-xs font-bold text-civic-600 font-mono">${esc(x.ID_Tiket)}</div><div class="text-[11px] text-slate-500">${fmtDT(x.Timestamp)}</div><div class="text-[10px] mt-1 inline-block bg-slate-100 px-2 py-0.5 rounded">${esc(x.Sumber_Laporan)}</div></div>
-    <div class="sm:col-span-3"><div class="text-sm font-bold">${esc(x.Nama_Anak)}</div><div class="text-[11px] font-mono text-slate-600">${esc(x.NIK_Anak)}</div><div class="text-[11px] text-slate-500">${age(x.Tanggal_Lahir)} th · ${esc(x.Jenis_Kelamin)}</div></div>
+    <div class="sm:col-span-3"><div class="text-sm font-bold">${esc(x.Nama_Anak)}</div><div class="text-[11px] font-mono text-slate-600">${esc(x.NIK_Anak)}</div><div class="text-[11px] text-slate-500">${age(x.Tanggal_Lahir)} th Â· ${esc(x.Jenis_Kelamin)}</div></div>
     <div class="sm:col-span-3"><div class="text-xs font-semibold">Kec. ${esc(x.Kecamatan)}</div><div class="text-[11px] text-slate-500">${esc(x.Kelurahan_Desa)}</div><div class="text-[11px] text-red-700">${esc(x.Faktor_Penyebab)}</div></div>
     <div class="sm:col-span-3 flex sm:flex-col gap-2 sm:items-end items-center justify-between"><div class="text-right"><span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold ${st[1]}">${esc(st[0])}</span><div>${sla}</div></div><button class="${btnP}" onclick="openLaporan(${i})">Detail & Tindakan</button></div></div>`;}).join('')||'<div class="bg-white border border-slate-200 rounded-lg p-8 text-center text-xs text-slate-400">Tidak ada laporan pada filter ini.</div>'}</div>
   ${pager(r,'S.q.page','V.verifikasi')}`;
 };
-function pager(r,pageVar,fn){return `<div class="flex items-center justify-between mt-4 text-xs text-slate-500"><span>${fmtN(r.total)} data · halaman ${r.page}/${r.totalPages}</span><div class="flex gap-2"><button class="${btnO}" ${r.page<=1?'disabled':''} onclick="${pageVar}=${r.page-1};${fn}()">Sebelumnya</button><button class="${btnO}" ${r.page>=r.totalPages?'disabled':''} onclick="${pageVar}=${r.page+1};${fn}()">Berikutnya</button></div></div>`;}
+function pager(r,pageVar,fn){return `<div class="flex items-center justify-between mt-4 text-xs text-slate-500"><span>${fmtN(r.total)} data Â· halaman ${r.page}/${r.totalPages}</span><div class="flex gap-2"><button class="${btnO}" ${r.page<=1?'disabled':''} onclick="${pageVar}=${r.page-1};${fn}()">Sebelumnya</button><button class="${btnO}" ${r.page>=r.totalPages?'disabled':''} onclick="${pageVar}=${r.page+1};${fn}()">Berikutnya</button></div></div>`;}
 function openLaporan(i){
   const x=S.cache.queue[i];
   const row=(k,v)=>`<div><div class="text-[10px] uppercase tracking-wide text-slate-400">${k}</div><div class="text-sm">${v||'-'}</div></div>`;
   const wa='https://wa.me/'+String(x.No_WA_Pelapor).replace(/\D/g,'').replace(/^0/,'62');
-  openModal(x.ID_Tiket+' — '+x.Nama_Anak,`
+  openModal(x.ID_Tiket+' â€” '+x.Nama_Anak,`
    <div class="grid grid-cols-2 gap-3 mb-4">${row('NIK',`<span class="font-mono">${esc(x.NIK_Anak)}</span>`)}${row('Tgl lahir / usia',esc(String(x.Tanggal_Lahir).slice(0,10))+' ('+age(x.Tanggal_Lahir)+' th)')}${row('Jenjang terakhir',esc(x.Jenjang_Pendidikan_Terakhir))}${row('Wilayah',esc(x.Kecamatan+' / '+x.Kelurahan_Desa))}
     <div class="col-span-2">${row('Alamat / patokan',esc(x.Alamat_Rinci_Patokan))}</div><div class="col-span-2">${row('Faktor penyebab',esc(x.Faktor_Penyebab))}</div><div class="col-span-2">${row('Catatan observasi',esc(x.Catatan_Observasi))}</div>
-    ${row('Pelapor',esc(x.Nama_Pelapor)+' ('+esc(x.Hubungan_Pelapor)+')')}${row('WhatsApp',`<a class="text-emerald-700 font-semibold" target="_blank" rel="noopener" href="${wa}">${esc(x.No_WA_Pelapor)} ↗</a>`)}</div>
+    ${row('Pelapor',esc(x.Nama_Pelapor)+' ('+esc(x.Hubungan_Pelapor)+')')}${row('WhatsApp',`<a class="text-emerald-700 font-semibold" target="_blank" rel="noopener" href="${wa}">${esc(x.No_WA_Pelapor)} â†—</a>`)}</div>
    <div class="border-t border-slate-100 pt-4 grid grid-cols-2 gap-3">
     <div><label class="${lbl}">Status</label><select id="fStatus" class="${inp}" onchange="$('validBox').classList.toggle('hidden',this.value!=='VERIFIKASI_VALID')">${Object.keys(STAT_LAP).map(k=>`<option value="${k}" ${k===x.Status_SLA?'selected':''}>${STAT_LAP[k][0]}</option>`).join('')}</select></div>
     <div><label class="${lbl}">Ditugaskan ke</label><input id="fAssign" class="${inp}" placeholder="UPTD Wilayah Tempe" value="${esc(x.Ditugaskan_Ke)}"></div>
-    <div id="validBox" class="col-span-2 grid grid-cols-2 gap-3 ${x.Status_SLA==='VERIFIKASI_VALID'?'':'hidden'}"><div><label class="${lbl}">Status intervensi (direktori publik)</label><select id="fInt" class="${inp}">${opt(STAT_INT,'Verifikasi Valid')}</select></div><div><label class="${lbl}">Mitra pendidikan</label><input id="fMitra" class="${inp}" placeholder="PKBM / sekolah"></div>
+    <div id="validBox" class="col-span-2 grid grid-cols-2 gap-3 ${x.Status_SLA==='VERIFIKASI_VALID'?'':'hidden'}"><div><label class="${lbl}">Status intervensi (direktori publik)</label><select id="fInt" class="${inp}">${opt(STAT_INT,'','Pilih status intervensiâ€¦')}</select></div><div><label class="${lbl}">Mitra pendidikan</label><input id="fMitra" class="${inp}" placeholder="PKBM / sekolah"></div>
      <p class="col-span-2 text-[11px] text-slate-500">Saat disimpan sebagai Valid, data disalin ke Master Data dengan nama & NIK disamarkan untuk direktori publik.</p></div>
     <div class="col-span-2"><label class="${lbl}">Catatan verifikator</label><textarea id="fNote" rows="2" class="${inp}">${esc(x.Catatan_Verifikator)}</textarea></div></div>`,
    `${S.user.role==='superadmin'?`<button class="${btnD} mr-auto" onclick="delLaporan('${esc(x.ID_Tiket)}')">Hapus</button>`:''}<button class="${btnO}" onclick="closeModal()">Batal</button><button class="${btnP}" onclick="saveLaporan('${esc(x.ID_Tiket)}')">Simpan</button>`);
 }
 async function saveLaporan(id){
   const st=val('fStatus'),b={idTiket:id,statusSLA:st,ditugaskanKe:val('fAssign'),catatanVerifikator:val('fNote')};
-  if(st==='VERIFIKASI_VALID'){b.statusIntervensi=val('fInt');b.mitraPendidikan=val('fMitra');}
+  if(st==='VERIFIKASI_VALID'){
+    b.statusIntervensi=val('fInt');b.mitraPendidikan=val('fMitra');
+    if(!b.statusIntervensi){toast('Pilih status intervensi terlebih dahulu.',true);return;}
+  }
   const r=await act(()=>api('updateStatus',b),'Tersimpan.');if(r){closeModal();V.verifikasi();}
 }
 async function delLaporan(id){if(!confirm('Hapus permanen laporan '+id+'?'))return;const r=await act(()=>api('deleteLaporan',{idTiket:id}),'Dihapus.');if(r){closeModal();V.verifikasi();}}
@@ -241,7 +259,7 @@ V.master=async function(){
   const r=await act(()=>api('masterList',{search:S.m.search,kecamatan:S.m.kecamatan,status:S.m.status,page:S.m.page,pageSize:10}));if(!r)return;
   S.cache.master=r.data;
   $('main').innerHTML=`<div class="bg-white border border-slate-200 rounded-lg p-4 mb-4 flex flex-wrap gap-2 items-center">
-   <input class="${inp} !w-56" placeholder="Cari NIK, nama, ID registrasi…" value="${esc(S.m.search)}" oninput="clearTimeout(mTimer);mTimer=setTimeout(()=>{S.m.search=this.value.trim();S.m.page=1;V.master();},450)">
+   <input class="${inp} !w-56" placeholder="Cari NIK, nama, ID registrasiâ€¦" value="${esc(S.m.search)}" oninput="clearTimeout(mTimer);mTimer=setTimeout(()=>{S.m.search=this.value.trim();S.m.page=1;V.master();},450)">
    <select class="${inp} !w-40" onchange="S.m.kecamatan=this.value;S.m.page=1;V.master()">${opt(KEC,S.m.kecamatan,'Semua Kecamatan')}</select>
    <select class="${inp} !w-48" onchange="S.m.status=this.value;S.m.page=1;V.master()">${opt(['Verifikasi Valid','Binaan UPTD','Diusulkan Beasiswa','Kembali Bersekolah'],S.m.status,'Semua Status')}</select>
    <button class="${btnP} ml-auto" onclick="openMaster(-1)">+ Tambah Data</button><button class="${btnO}" onclick="exportData('master')">Ekspor Excel</button></div>
@@ -258,7 +276,7 @@ function openMaster(i){
    <div><label class="${lbl}">Kecamatan *</label><select id="mKec" class="${inp}">${opt(KEC,x.Kecamatan)}</select></div>
    <div><label class="${lbl}">Kelurahan / Desa</label><input id="mDesa" class="${inp}" value="${esc(x.Kelurahan_Desa)}"></div>
    <div class="col-span-2"><label class="${lbl}">Faktor kendala</label><input id="mFak" class="${inp}" value="${esc(x.Faktor_Kendala)}"></div>
-   <div><label class="${lbl}">Status intervensi</label><select id="mSt" class="${inp}">${opt(STAT_INT,x.Status_Intervensi)}</select></div>
+   <div><label class="${lbl}">Status intervensi</label><select id="mSt" class="${inp}">${opt(x.Status_Intervensi&&!STAT_INT.includes(x.Status_Intervensi)?[x.Status_Intervensi,...STAT_INT]:STAT_INT,x.Status_Intervensi)}</select></div>
    <div><label class="${lbl}">Mitra pendidikan</label><input id="mMitra" class="${inp}" value="${esc(x.Mitra_Pendidikan)}"></div></div>
    <p class="text-[11px] text-slate-500 mt-3">Nama dan NIK untuk direktori publik disamarkan otomatis.</p>`,
    `${i>=0&&S.user.role==='superadmin'?`<button class="${btnD} mr-auto" onclick="delMaster('${esc(x.ID_Registrasi)}')">Hapus</button>`:''}<button class="${btnO}" onclick="closeModal()">Batal</button><button class="${btnP}" onclick="saveMaster('${esc(x.ID_Registrasi||'')}')">Simpan</button>`);
@@ -273,14 +291,14 @@ async function delMaster(id){if(!confirm('Hapus data '+id+' dari direktori?'))re
 V.program=async function(){
   const r=await act(()=>api('programList'));if(!r)return;S.cache.prog=r.data;
   $('main').innerHTML=`<div class="flex justify-between items-center mb-4"><p class="text-xs text-slate-500">Kelola program pemulihan (Paket A/B/C, beasiswa perlengkapan, SMP Terbuka, dll).</p><button class="${btnP}" onclick="openProg(-1)">+ Tambah Program</button></div>
-  <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">${r.data.map((p,i)=>{const pct=p.Kuota?Math.min(100,Math.round(p.Terisi/p.Kuota*100)):0;return `<div class="bg-white border border-slate-200 rounded-lg p-5"><div class="flex justify-between gap-2"><div><div class="text-[10px] font-mono text-slate-400">${esc(p.ID_Program)}</div><div class="text-sm font-bold">${esc(p.Nama_Program)}</div><div class="text-[11px] text-slate-500">${esc(p.Jenis)} · ${esc(p.Mitra_Pelaksana)}</div></div><span class="h-fit text-[10px] font-bold px-2 py-1 rounded-full ${p.Status==='Aktif'?'bg-emerald-50 text-emerald-700':'bg-slate-100 text-slate-600'}">${esc(p.Status)}</span></div>
+  <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">${r.data.map((p,i)=>{const pct=p.Kuota?Math.min(100,Math.round(p.Terisi/p.Kuota*100)):0;return `<div class="bg-white border border-slate-200 rounded-lg p-5"><div class="flex justify-between gap-2"><div><div class="text-[10px] font-mono text-slate-400">${esc(p.ID_Program)}</div><div class="text-sm font-bold">${esc(p.Nama_Program)}</div><div class="text-[11px] text-slate-500">${esc(p.Jenis)} Â· ${esc(p.Mitra_Pelaksana)}</div></div><span class="h-fit text-[10px] font-bold px-2 py-1 rounded-full ${p.Status==='Aktif'?'bg-emerald-50 text-emerald-700':'bg-slate-100 text-slate-600'}">${esc(p.Status)}</span></div>
    <div class="mt-4 text-xs flex justify-between"><span>Terisi ${fmtN(p.Terisi)} / ${fmtN(p.Kuota)}</span><span class="font-mono">${pct}%</span></div><div class="h-2 bg-slate-100 rounded mt-1 overflow-hidden"><div class="h-full bg-emerald-500" style="width:${pct}%"></div></div>
    <p class="text-[11px] text-slate-500 mt-3">${esc(p.Keterangan)}</p><div class="mt-3 text-[11px] text-slate-400">${esc(p.Periode)}</div><div class="mt-3 flex gap-2"><button class="${btnO}" onclick="openProg(${i})">Ubah</button>${S.user.role==='superadmin'?`<button class="${btnD}" onclick="delProg('${esc(p.ID_Program)}')">Hapus</button>`:''}</div></div>`;}).join('')||'<div class="col-span-full bg-white border border-slate-200 rounded-lg p-8 text-center text-xs text-slate-400">Belum ada program.</div>'}</div>`;
 };
 function openProg(i){const p=i<0?{Status:'Aktif'}:S.cache.prog[i];
   openModal(i<0?'Tambah Program':'Ubah '+p.ID_Program,`<div class="grid grid-cols-2 gap-3">
    <div class="col-span-2"><label class="${lbl}">Nama program *</label><input id="pNama" class="${inp}" value="${esc(p.Nama_Program)}"></div>
-   <div><label class="${lbl}">Jenis</label><select id="pJenis" class="${inp}">${opt(['Kesetaraan (Paket A/B/C)','Beasiswa Perlengkapan','Sekolah Terbuka','Transportasi/Antar-Jemput','Lainnya'],p.Jenis)}</select></div>
+   <div><label class="${lbl}">Jenis</label><select id="pJenis" class="${inp}">${opt(p.Jenis&&!PROGRAM_TYPES.includes(p.Jenis)?[p.Jenis,...PROGRAM_TYPES]:PROGRAM_TYPES,p.Jenis)}</select></div>
    <div><label class="${lbl}">Mitra pelaksana</label><input id="pMitra" class="${inp}" value="${esc(p.Mitra_Pelaksana)}"></div>
    <div><label class="${lbl}">Kuota</label><input id="pKuota" type="number" min="0" class="${inp}" value="${esc(p.Kuota)}"></div><div><label class="${lbl}">Terisi</label><input id="pTerisi" type="number" min="0" class="${inp}" value="${esc(p.Terisi)}"></div>
    <div><label class="${lbl}">Status</label><select id="pStatus" class="${inp}">${opt(['Aktif','Selesai','Ditutup'],p.Status)}</select></div><div><label class="${lbl}">Periode</label><input id="pPeriode" class="${inp}" placeholder="Tahun ajaran 2026/2027" value="${esc(p.Periode)}"></div>
@@ -314,18 +332,64 @@ async function exportRows(rows,name){
 // ---------- KELOLA BERANDA ----------
 V.beranda=async function(){
   let cfg={};try{const res=await fetch(S.api+'?action=config&_='+Date.now());cfg=await res.json();}catch(e){toast('Gagal memuat pengaturan saat ini.',true);}
-  $('main').innerHTML=`<div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-5 text-xs text-blue-900">Ubah teks, foto, angka KPI, pengumuman, dan kontak halaman Beranda. <b>Kosongkan kolom untuk memakai teks bawaan.</b> Perubahan tampil di situs publik dalam ±1 menit. Foto: tempel URL gambar <b>https://</b> (mis. dari Google Drive publik / hosting gambar).</div>
+  const savedContact=String(cfg.kontak_wa||'').replace(/\D/g,'');
+  if(savedContact==='08114200989'||savedContact==='628114200989')cfg.kontak_wa='0851-3991-1440';
+  $('main').innerHTML=`<div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-5 text-xs text-blue-900">Ubah teks, foto, angka KPI, pengumuman, dan kontak halaman Beranda. <b>Kosongkan kolom untuk memakai teks bawaan.</b> Foto yang diunggah akan langsung dipasang dan dapat dilihat publik. Gunakan hanya foto yang sudah mendapat izin publikasi; maksimal 5 MB per foto, format JPG, PNG, atau WebP. Perubahan tampil di situs publik dalam Â±1 menit.</div>
   <form id="cmsForm" class="space-y-5" onsubmit="return false">${CMS.map(sec=>`<section class="bg-white border border-slate-200 rounded-lg p-5"><h3 class="text-sm font-bold mb-1">${esc(sec.t)}</h3>${sec.note?`<p class="text-[11px] text-slate-500 mb-3">${esc(sec.note)}</p>`:'<div class="mb-3"></div>'}<div class="grid md:grid-cols-2 gap-4">${sec.f.map(([k,l,t,d])=>{const v=cfg[k]||'';let c;
     if(t==='toggle')c=`<label class="flex items-center gap-2 text-sm"><input type="checkbox" id="c_${k}" ${v==='true'?'checked':''}> Aktif</label>`;
     else if(t==='area')c=`<textarea id="c_${k}" rows="3" class="${inp}" placeholder="${esc(d)}">${esc(v)}</textarea>`;
     else if(t.startsWith('select:'))c=`<select id="c_${k}" class="${inp}">${opt(t.slice(7).split('|'),v||d)}</select>`;
+    else if(t==='url'){const preview=/^https:\/\//i.test(v)?v:'';c=`<div class="space-y-2"><div class="flex flex-col sm:flex-row gap-2"><input type="url" id="c_${k}" class="${inp} min-w-0 flex-1" placeholder="https://â€¦" value="${esc(v)}" oninput="previewCmsPhoto('${k}',this.value)"><label class="${btnO} cursor-pointer text-center whitespace-nowrap">Unggah foto<input id="f_${k}" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="uploadCmsPhoto('${k}',this)"></label></div><img id="p_${k}" src="${esc(preview)}" alt="${esc(l)}" class="h-28 max-w-full rounded border border-slate-200 object-cover ${preview?'':'hidden'}"><p id="u_${k}" class="text-[11px] text-slate-500"></p></div>`;}
     else c=`<input id="c_${k}" class="${inp}" placeholder="${esc(d)}" value="${esc(v)}">`;
     return `<div class="${t==='area'||k.startsWith('banner')||k.endsWith('url')?'md:col-span-2':''}"><label class="${lbl}">${esc(l)}</label>${c}</div>`;}).join('')}</div></section>`).join('')}
-   <div class="sticky bottom-0 bg-slate-50/90 backdrop-blur py-3 flex gap-2"><button class="${btnP}" onclick="saveCms()">Simpan Perubahan Beranda</button><a class="${btnO}" href="index.html" target="_blank">Pratinjau Beranda ↗</a></div></form>`;
+   <div class="sticky bottom-0 bg-slate-50/90 backdrop-blur py-3 flex gap-2"><button class="${btnP}" onclick="saveCms()">Simpan Perubahan Beranda</button><a class="${btnO}" href="index.html" target="_blank">Pratinjau Beranda â†—</a></div></form>`;
+   CMS.forEach(sec=>sec.f.forEach(([key,,type])=>{if(type==='url')previewCmsPhoto(key,$('c_'+key).value);}));
 };
+function previewCmsPhoto(key,url){
+   const img=$('p_'+key),status=$('u_'+key);if(!img)return;
+   const normalized=normalizeCmsPhotoUrl(url);
+   img.onload=()=>{if(status)status.textContent='Pratinjau foto berhasil dimuat.';};
+   img.onerror=()=>{if(status)status.textContent='Foto tidak dapat ditampilkan. Periksa akses publik atau tautan gambar.';};
+   if(/^https:\/\//i.test(normalized)){img.src=normalized;img.classList.remove('hidden');}
+   else{img.removeAttribute('src');img.classList.add('hidden');}
+}
+function normalizeCmsPhotoUrl(value){
+   const url=String(value||'').trim();
+   const match=url.match(/^https:\/\/drive\.google\.com\/(?:file\/d\/([^/?#]+)|[^?#]*)(?:\?([^#]*))?/i);
+   if(!match)return url;
+   const queryId=(match[2]||'').match(/(?:^|&)id=([^&]+)/i);
+   const id=match[1]||(queryId&&queryId[1]);
+   return id?'https://drive.google.com/thumbnail?id='+encodeURIComponent(id)+'&sz=w1600':url;
+}
+async function uploadCmsPhoto(key,input){
+  const file=input.files&&input.files[0];if(!file)return;
+  const allowed=['image/jpeg','image/png','image/webp'];
+  if(!allowed.includes(file.type)){toast('Pilih foto berformat JPG, PNG, atau WebP.',true);input.value='';return;}
+  if(file.size>5*1024*1024){toast('Ukuran foto maksimal 5 MB.',true);input.value='';return;}
+  input.disabled=true;
+  const status=$('u_'+key);if(status)status.textContent='Mengunggah fotoâ€¦';
+  let uploaded=null;
+  try{
+    const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(',')[1]||'');reader.onerror=()=>reject(new Error('Foto tidak dapat dibaca dari perangkat.'));reader.readAsDataURL(file);});
+    if(!data)throw new Error('Isi foto tidak terbaca.');
+    uploaded=await api('uploadImage',{name:file.name,mimeType:file.type,data},120000);
+    if(!uploaded.url||!/^https:\/\//i.test(uploaded.url))throw new Error('Server tidak mengembalikan tautan foto yang valid.');
+    $('c_'+key).value=uploaded.url;previewCmsPhoto(key,uploaded.url);
+    await api('configSave',{values:{[key]:uploaded.url}});
+    if(status)status.textContent='Foto berhasil diunggah dan dipasang.';
+    toast('Foto berhasil diunggah dan pengaturan foto tersimpan.');
+  }catch(e){
+    if(status)status.textContent='';
+    toast(uploaded?'Foto sudah terunggah, tetapi pengaturan belum tersimpan. '+e.message:e.message,true);
+  }finally{input.value='';input.disabled=false;}
+}
 async function saveCms(){
   const values={};CMS.forEach(s=>s.f.forEach(([k,,t])=>{const e=$('c_'+k);if(!e)return;values[k]=t==='toggle'?(e.checked?'true':''):e.value.trim();}));
-  for(const k of ['hero_photo_url','hero_photo_url_2','hero_photo_url_3','hero_photo_url_4','hero_photo_url_5','catatan_foto_url']){if(values[k]&&!/^https:\/\//i.test(values[k])){toast('URL foto harus diawali https://',true);return;}}
+  for(const k of ['hero_photo_url','hero_photo_url_2','hero_photo_url_3','hero_photo_url_4','hero_photo_url_5','catatan_foto_url']){
+    values[k]=normalizeCmsPhotoUrl(values[k]);
+    if(values[k]&&!/^https:\/\//i.test(values[k])){toast('URL foto harus diawali https://',true);return;}
+    const field=$('c_'+k);if(field)field.value=values[k];
+  }
   const r=await act(()=>api('configSave',{values}),'Beranda diperbarui.');
 }
 
@@ -339,7 +403,7 @@ V.pengguna=async function(){
 function openUser(i){const u=i<0?{Role:'verifikator',Aktif:true}:S.cache.users[i];
   openModal(i<0?'Tambah Pengguna':'Ubah '+u.Username,`<div class="grid grid-cols-2 gap-3"><div><label class="${lbl}">Username *</label><input id="uUser" class="${inp}" ${i>=0?'readonly':''} value="${esc(u.Username)}"></div><div><label class="${lbl}">Nama *</label><input id="uNama" class="${inp}" value="${esc(u.Nama)}"></div>
    <div><label class="${lbl}">Peran</label><select id="uRole2" class="${inp}">${opt(['verifikator','editor','superadmin'],u.Role)}</select></div><div><label class="${lbl}">Status</label><select id="uAktif" class="${inp}"><option value="1" ${u.Aktif?'selected':''}>Aktif</option><option value="0" ${u.Aktif?'':'selected'}>Nonaktif</option></select></div>
-   <div class="col-span-2"><label class="${lbl}">Kata sandi ${i>=0?'(kosongkan bila tidak diganti)':'*'} — min. 8 karakter</label><input id="uPass" type="password" class="${inp}" autocomplete="new-password"></div></div>`,
+   <div class="col-span-2"><label class="${lbl}">Kata sandi ${i>=0?'(kosongkan bila tidak diganti)':'*'} â€” min. 8 karakter</label><input id="uPass" type="password" class="${inp}" autocomplete="new-password"></div></div>`,
   `<button class="${btnO}" onclick="closeModal()">Batal</button><button class="${btnP}" onclick="saveUser()">Simpan</button>`);}
 async function saveUser(){const rec={Username:val('uUser'),Nama:val('uNama'),Role:val('uRole2'),Aktif:val('uAktif')==='1',Password:$('uPass').value};
   const r=await act(async()=>{const j=await api('usersSave',{record:rec});if(!j.success)throw new Error(j.error);return j;},'Tersimpan.');if(r){closeModal();V.pengguna();}}
@@ -351,14 +415,27 @@ V.sistem=async function(){
   $('main').innerHTML=`<div class="grid lg:grid-cols-3 gap-5"><div class="bg-white border border-slate-200 rounded-lg p-5 lg:col-span-1"><h3 class="text-sm font-bold mb-3">Koneksi Google Sheet</h3><div class="text-[11px] text-slate-500 mb-1">Endpoint Web App</div><div class="text-xs font-mono break-all mb-4">${esc(S.api)}</div>
    <div class="flex flex-wrap gap-2"><button class="${btnO}" onclick="testPing()">Uji Koneksi</button><button class="${btnO}" onclick="runSetup()">Perbaiki / Buat Sheet</button></div><div id="pingOut" class="text-xs mt-3 text-slate-600"></div>
    <p class="text-[11px] text-slate-500 mt-4">Tab yang dipakai: Data_Laporan_Masuk, Data_ATS_Terverifikasi, Pengaturan_Beranda, Program_Intervensi, Data_Petugas, Log_Audit_Petugas.</p></div>
-   <div class="bg-white border border-slate-200 rounded-lg p-5 lg:col-span-2"><h3 class="text-sm font-bold mb-3">Log Audit Aktivitas Petugas</h3><div class="max-h-[60vh] overflow-y-auto">${a.data.map(x=>`<div class="flex gap-3 text-xs py-1.5 border-b border-slate-50"><span class="font-mono text-slate-400 shrink-0">${fmtDT(x.Timestamp)}</span><span><b>${esc(x.Petugas)}</b> · ${esc(x.Aksi)} ${esc(x.Detail)}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada log.</p>'}</div></div></div>`;
+   <div class="bg-white border border-slate-200 rounded-lg p-5 lg:col-span-2"><h3 class="text-sm font-bold mb-3">Log Audit Aktivitas Petugas</h3><div class="max-h-[60vh] overflow-y-auto">${a.data.map(x=>`<div class="flex gap-3 text-xs py-1.5 border-b border-slate-50"><span class="font-mono text-slate-400 shrink-0">${fmtDT(x.Timestamp)}</span><span><b>${esc(x.Petugas)}</b> Â· ${esc(x.Aksi)} ${esc(x.Detail)}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada log.</p>'}</div></div></div>`;
 };
-async function testPing(){const t=Date.now();const r=await act(()=>api('ping'));if(r)$('pingOut').textContent='Terhubung ✓ · '+(Date.now()-t)+' ms · zona waktu '+r.timezone;}
+async function testPing(){const t=Date.now();const r=await act(()=>api('ping'));if(r)$('pingOut').textContent='Terhubung âœ“ Â· '+(Date.now()-t)+' ms Â· zona waktu '+r.timezone;}
 async function runSetup(){const r=await act(()=>api('setup'),'Struktur sheet diperiksa/dibuat.');if(r)V.sistem();}
+function setDatabaseConnection(connected){
+  const badge=$('syncBadge');
+  badge.classList.toggle('bg-emerald-500',connected);
+  badge.classList.toggle('bg-red-500',!connected);
+  const label=connected?'Database terhubung':'Database tidak terhubung';
+  badge.setAttribute('aria-label',label);
+  badge.title=label;
+}
+async function checkDatabaseConnection(){
+  try{await api('ping');setDatabaseConnection(true);}
+  catch(e){setDatabaseConnection(false);}
+}
 
 // ---------- INIT ----------
-$('btnLogin').onclick=doLogin;$('btnLogout').onclick=()=>logout(false);
-$('lPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+$('loginForm').addEventListener('submit',e=>{e.preventDefault();doLogin();});
+$('loginForm').addEventListener('input',()=>{$('loginErr').classList.add('hidden');});
+$('btnLogout').onclick=()=>logout(false);
 $('nav').addEventListener('click',e=>{
   const link=e.target.closest('a.nav-i');
   if(!link||!S.user||!NAV.some(n=>n.id===link.dataset.v&&n.roles.includes(S.user.role))||typeof V[link.dataset.v]!=='function')return;
@@ -371,6 +448,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
   const configuredApi=window.SIP_ATS_CONFIG&&window.SIP_ATS_CONFIG.API_URL;
   if(typeof configuredApi==='string'&&/^https:\/\/script\.google\.com\/.+\/exec\/?$/.test(configuredApi.trim()))S.api=configuredApi.trim();
   if(!S.api){$('loginErr').textContent='Konfigurasi koneksi server tidak tersedia. Hubungi pengelola situs.';$('loginErr').classList.remove('hidden');$('btnLogin').disabled=true;}
+  else{checkDatabaseConnection();window.setInterval(checkDatabaseConnection,30000);}
   const tok=sessionStorage.getItem('sipats_tok'),u=sessionStorage.getItem('sipats_user');
   if(tok&&u&&S.api){S.token=tok;S.user=JSON.parse(u);try{await api('me');enterApp();return;}catch(e){}}
 })();
